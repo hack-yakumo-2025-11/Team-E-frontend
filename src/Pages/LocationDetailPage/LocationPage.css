@@ -1,172 +1,88 @@
-.location-page {
+.location-page-screenshot {
   min-height: 100vh;
-  background-color: #F5F7FA;
-  padding-bottom: 20px;
-}
-
-.location-header {
-  background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
-  color: white;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 2px 10px rgba(0, 71, 171, 0.15);
-}
-
-.back-btn {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.location-title {
-  flex: 1;
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.task-icon-header {
-  font-size: 24px;
-}
-
-.task-progress-indicator {
-  background: #E6F2FF;
-  padding: 12px 20px;
-  text-align: center;
-  font-size: 14px;
-  color: #0047AB;
-  font-weight: 600;
-}
-
-.location-image-container {
-  width: 100%;
-  height: 240px;
+  background-color: #000;
+  position: relative;
   overflow: hidden;
 }
 
-.location-image {
+/* Back button overlay - positioned absolute on top of screenshot */
+.back-btn-overlay {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  background: rgba(0, 71, 171, 0.9);
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+/* Screenshot container - takes full width */
+.screenshot-container {
   width: 100%;
-  height: 100%;
+  max-height: 70vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.location-screenshot {
+  width: 100%;
+  height: auto;
+  display: block;
   object-fit: cover;
 }
 
-.location-info {
-  padding: 20px;
-  background: white;
-}
-
-.location-name {
-  font-size: 24px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 12px;
-}
-
-.location-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.rating {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.review-count {
-  color: #888;
-  font-weight: 400;
-}
-
-.category-badge {
-  background: #4caf50;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.location-details {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #E6F2FF;
-}
-
-.detail-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #666;
-  font-size: 14px;
-}
-
-.location-description {
-  font-size: 15px;
-  line-height: 1.6;
-  color: #666;
-}
-
-.mission-checkin-section {
-  margin: 20px;
+/* Demo overlay section - your custom buttons at bottom */
+.demo-overlay-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background: linear-gradient(135deg, #FFF8E1 0%, #FFE082 100%);
-  border: 3px solid #FFD54F;
-  border-radius: 16px;
-  padding: 24px;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  padding: 24px 20px 32px 20px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
-.checkin-header h3 {
+.demo-section-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.demo-section-header h3 {
   font-size: 20px;
   font-weight: 700;
   color: #333;
   margin-bottom: 8px;
 }
 
-.checkin-header p {
+.demo-section-header p {
   font-size: 14px;
   color: #666;
-  margin-bottom: 16px;
+  margin: 0;
 }
 
-.reward-display {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  text-align: center;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.demo-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.reward-label {
-  display: block;
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 4px;
-}
-
-.reward-amount {
-  display: block;
-  font-size: 32px;
-  font-weight: 700;
-  color: #FF9800;
-}
-
-.scan-button {
+/* Demo complete button - Green */
+.demo-complete-btn {
   width: 100%;
-  background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -175,30 +91,50 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.demo-complete-btn:hover {
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+/* Demo scan button - Blue */
+.demo-scan-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 71, 171, 0.3);
 }
 
-.scan-button:hover {
+.demo-scan-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 71, 171, 0.4);
 }
 
-.helper-text {
+.demo-helper-text {
   text-align: center;
   font-size: 13px;
   color: #666;
-  margin: 0;
+  margin: 8px 0 0 0;
 }
 
-.scanner-container {
+/* Scanner wrapper */
+.scanner-wrapper {
   background: white;
   border-radius: 12px;
   padding: 16px;
-  margin-bottom: 12px;
 }
 
-.cancel-scan-button {
+.cancel-scan-btn {
   width: 100%;
   background: #f44336;
   color: white;
@@ -211,78 +147,32 @@
   margin-top: 12px;
 }
 
-.action-buttons {
-  display: flex;
-  gap: 12px;
-  padding: 0 20px;
-  margin-top: 20px;
-}
-
-.action-btn {
-  flex: 1;
-  padding: 14px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.action-btn.outline {
-  background: white;
-  border: 2px solid #0047AB;
-  color: #0047AB;
-}
-
-.action-btn.outline:hover {
-  background: #E6F2FF;
-}
-
 .loading {
   text-align: center;
   padding: 40px 20px;
   font-size: 16px;
   color: #666;
 }
-/* Demo mode button - prominent green */
-.scan-button.demo-mode {
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-  margin-bottom: 12px;
-  width: 100%;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 18px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-}
+```
 
-.scan-button.demo-mode:hover {
-  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
-}
+---
 
-/* Secondary scan button - blue */
-.scan-button-secondary {
-  width: 100%;
-  background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(0, 71, 171, 0.3);
-}
+## **📸 HOW TO USE SCREENSHOTS:**
 
-.scan-button-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 71, 171, 0.4);
-}
+### **Step 1: Take Screenshots**
+
+From the existing TDC app, take 3 screenshots:
+1. Ichiran Ramen location page
+2. Stadium entrance location page  
+3. Thunder Dolphin location page
+
+### **Step 2: Save Screenshots**
+
+In your project:
+```
+frontend/
+├── public/
+│   └── screenshots/
+│       ├── ichiran-location.png
+│       ├── stadium-location.png
+│       └── dolphin-location.png
