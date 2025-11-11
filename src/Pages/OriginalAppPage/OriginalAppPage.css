@@ -28,15 +28,15 @@
 }
 
 .main-screen-click-scan-button {
-    right: 40vw;
-    bottom: 5vh;
-    width: 60vw;
-    height: 7vh;
+    left: 6vw;
+    bottom: 17vh;
+    width: 88vw;
+    height: 6vh;    
 }
 
 .main-screen-close-scan-button {
-    right: 2vw;
-    bottom: 20vh;
-    width: 5vh;
-    height: 5vh;
+    right: 6vw;
+    bottom: 70vh;
+    width: 3vh;
+    height: 3vh;
 }
