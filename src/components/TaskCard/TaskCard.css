@@ -1,0 +1,132 @@
+.task-card {
+  background: white;
+  border: 2px solid #E6F2FF;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
+}
+
+.task-card:not(.completed):hover {
+  border-color: #0047AB;
+  box-shadow: 0 4px 16px rgba(0, 71, 171, 0.15);
+  transform: translateY(-2px);
+}
+
+.task-card.completed {
+  background: #f0f8f0;
+  border-color: #4caf50;
+  opacity: 0.8;
+}
+
+.task-card.recommended {
+  border-color: #FFB800;
+  border-width: 3px;
+  box-shadow: 0 4px 16px rgba(255, 184, 0, 0.2);
+}
+
+.recommended-badge {
+  position: absolute;
+  top: -12px;
+  right: 16px;
+  background: linear-gradient(135deg, #FFB800 0%, #FF9800 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 12px rgba(255, 184, 0, 0.4);
+  z-index: 10;
+}
+
+.task-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.task-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-badge {
+  background: #E6F2FF;
+  color: #0047AB;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.task-content {
+  margin-left: 4px;
+}
+
+.task-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.task-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.task-location {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #E6F2FF;
+}
+
+.task-reward {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #ff9800;
+}
+
+.reward-icon {
+  font-size: 16px;
+}
+
+.task-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.status-completed {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.status-available {
+  color: #0047AB;
+  font-weight: 600;
+}
