@@ -1,0 +1,31 @@
+.countdown-timer {
+  background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.timer-icon {
+  font-size: 32px;
+}
+
+.timer-text {
+  flex: 1;
+}
+
+.timer-label {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+
+.timer-value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
