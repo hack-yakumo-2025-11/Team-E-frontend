@@ -5,6 +5,7 @@ import TaskCard from '../../components/TaskCard/TaskCard';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import { getMissionById } from '../../services/api';
 import './MissionPage.css';
+import BottomBar from '../../components/BottomBar/BottobBar';
 
 function MissionPage() {
   const navigate = useNavigate();
@@ -262,6 +263,8 @@ function MissionPage() {
         </div>
 
         <ProgressBar current={completedCount} total={mission.tasks.length} />
+
+        <BottomBar />
       </div>
     </div>
   );
