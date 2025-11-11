@@ -1,14 +1,12 @@
-.mission-page {
-  min-height: 100vh;
-  background-color: #F5F7FA;
-  padding-bottom: 80px;
-}
-
+/* Mission Header with Reset Button */
 .mission-header {
   background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
   color: white;
   padding: 24px 20px;
   box-shadow: 0 2px 10px rgba(0, 71, 171, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .mission-title {
@@ -18,10 +16,65 @@
   align-items: center;
   gap: 12px;
   margin: 0;
+  flex: 1;
 }
 
 .mission-icon {
   font-size: 28px;
+}
+
+.reset-demo-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.reset-demo-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(180deg);
+}
+
+/* Mission Complete Banner */
+.mission-complete-banner {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  padding: 24px;
+  border-radius: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+  animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mission-complete-banner h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.mission-complete-banner p {
+  font-size: 16px;
+  margin: 0;
+  opacity: 0.9;
 }
 
 .mission-content {
@@ -127,6 +180,12 @@
 
 .task-list {
   margin-bottom: 20px;
+}
+
+.mission-page {
+  min-height: 100vh;
+  background-color: #F5F7FA;
+  padding-bottom: 80px;
 }
 
 .loading,
