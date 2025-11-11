@@ -2,22 +2,38 @@ import './ProgressBar.css';
 
 function ProgressBar({ current, total }) {
   const percentage = Math.round((current / total) * 100);
+  
+  // Generate steps from 0 to total (0, 1, 2, 3)
+  const steps = Array.from({ length: total + 1 }, (_, i) => i);
 
   return (
-    <div className="progress-container">
-      <div className="progress-header">
+    <div className="progress-bar-container">
+      <div className="progress-bar-header">
         <span className="progress-label">Mission Progress</span>
-        <span className="progress-count">
-          {current}/{total} Tasks
-        </span>
+        <span className="progress-percentage">{percentage}%</span>
       </div>
-      <div className="progress-bar-wrapper">
-        <div
-          className="progress-bar-fill"
-          style={{ width: `${percentage}%` }}
-        >
-          <span className="progress-percentage">{percentage}%</span>
+
+      <div className="progress-steps">
+        <div className="progress-line">
+          <div 
+            className="progress-line-fill" 
+            style={{ width: `${(current / total) * 100}%` }}
+          />
         </div>
+        
+        {steps.map((step) => (
+          <div key={step} className="progress-step-wrapper">
+            <div 
+              className={`progress-step ${step <= current ? 'completed' : ''}`}
+            >
+              {step}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="progress-info">
+        <span className="tasks-completed">{current} of {total} tasks completed</span>
       </div>
     </div>
   );

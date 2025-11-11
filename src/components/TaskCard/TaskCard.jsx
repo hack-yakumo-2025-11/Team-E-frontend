@@ -1,80 +1,63 @@
 import './TaskCard.css';
-import { ChevronRight, Star } from 'lucide-react';
 
 function TaskCard({ task, taskNumber, isCompleted, isRecommended, onClick }) {
-  const getIconForType = (type) => {
-    const icons = {
-      food: '🍜',
-      photo: '📸',
-      entertainment: '🎢',
-      shopping: '🛍️',
-    };
-    return icons[type] || '📍';
+  const getTypeIcon = (type) => {
+    switch(type) {
+      case 'food': return '🍜';
+      case 'photo': return '📸';
+      case 'entertainment': return '🎢';
+      case 'shopping': return '🛍️';
+      default: return '📍';
+    }
   };
 
-  const getColorForType = (type) => {
-    const colors = {
-      food: '#4caf50',
-      photo: '#9c27b0',
-      entertainment: '#ff9800',
-      shopping: '#1E90FF',
-    };
-    return colors[type] || '#757575';
+  const getTypeColor = (type) => {
+    switch(type) {
+      case 'food': return '#4caf50';
+      case 'photo': return '#9c27b0';
+      case 'entertainment': return '#ff9800';
+      case 'shopping': return '#1E90FF';
+      default: return '#757575';
+    }
   };
 
   return (
-    <div
-      className={`task-card ${isCompleted ? 'completed' : ''} ${
-        isRecommended ? 'recommended' : ''
-      }`}
-      onClick={!isCompleted ? onClick : undefined}
+    <div 
+      className={`task-card ${isCompleted ? 'completed' : ''} ${isRecommended ? 'recommended' : ''}`}
+      onClick={onClick}
       style={{ cursor: isCompleted ? 'default' : 'pointer' }}
     >
       {isRecommended && !isCompleted && (
         <div className="recommended-badge">
-          <Star size={14} fill="#FFB800" color="#FFB800" />
-          <span>Recommended Next</span>
+          ⭐ RECOMMENDED NEXT
+        </div>
+      )}
+      
+      {isCompleted && (
+        <div className="completed-badge">
+          ✅ COMPLETED
         </div>
       )}
 
-      <div className="task-card-header">
-        <div
-          className="task-icon"
-          style={{
-            backgroundColor: isCompleted ? '#e0e0e0' : getColorForType(task.type),
-          }}
-        >
-          {getIconForType(task.type)}
+      <div className="task-card-content">
+        <div className="task-icon" style={{ backgroundColor: getTypeColor(task.type) }}>
+          {getTypeIcon(task.type)}
         </div>
-        <div className="task-badge">Task {taskNumber} of 3</div>
-      </div>
 
-      <div className="task-content">
-        <h3 className="task-title">{task.title}</h3>
+        <h3 className="task-title">Task {taskNumber}: {task.title}</h3>
+        
+        <div className="task-reward">+{task.reward} FUN</div>
+
         <p className="task-description">{task.description}</p>
 
-        {task.locationName && (
-          <div className="task-location">
-            📍 {task.walkTime} • {task.distance}
-          </div>
-        )}
+        <div className="task-location">
+          <span className="location-pin">📍</span>
+          <span className="location-name">{task.locationName}</span>
+        </div>
 
-        <div className="task-footer">
-          <div className="task-reward">
-            <span className="reward-icon">🎁</span>
-            <span className="reward-text">+{task.reward} FUN</span>
-          </div>
-
-          <div className="task-status">
-            {isCompleted ? (
-              <span className="status-completed">✅ Completed</span>
-            ) : (
-              <>
-                <span className="status-available">Available</span>
-                <ChevronRight size={20} />
-              </>
-            )}
-          </div>
+        <div className="task-meta">
+          <span className="walk-icon">🚶</span>
+          <span className="walk-time">{task.walkTime} • {task.distance} away</span>
         </div>
       </div>
     </div>

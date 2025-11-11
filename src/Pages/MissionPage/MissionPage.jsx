@@ -20,7 +20,7 @@ function MissionPage() {
     
     return {
       id: 'm1',
-      title: 'Mission',
+      title: 'Todays Mission',
       description: 'Explore 3 TDC spots before the game!',
       totalReward: 800,
       bonusReward: 100,
@@ -149,27 +149,7 @@ function MissionPage() {
 
   const getCompletedCount = () => {
     return mission?.tasks.filter((t) => t.completed).length || 0;
-  };
-
-  const handleResetDemo = () => {
-    if (window.confirm('🔄 Reset all completed tasks?\n\nThis will make all tasks available again for demo purposes.')) {
-      console.log('Resetting all tasks');
-      
-      // Clear state
-      setCompletedTasks([]);
-      
-      // Clear localStorage
-      localStorage.removeItem('completedTasks');
-      
-      // Reset mission
-      setMission(getDummyMission([]));
-      
-      console.log('All tasks reset successfully');
-      
-      // Show confirmation
-      alert('✅ All tasks have been reset!');
-    }
-  };
+  }
 
   if (loading) {
     return (
@@ -198,13 +178,6 @@ function MissionPage() {
           <span className="mission-icon">🎯</span>
           {mission.title}
         </h1>
-        <button 
-          className="reset-demo-btn" 
-          onClick={handleResetDemo}
-          title="Reset all tasks for demo"
-        >
-          🔄
-        </button>
       </div>
 
       <div className="mission-content">
@@ -214,9 +187,6 @@ function MissionPage() {
           <div className="mission-complete-banner">
             <h2>🎉 Mission Complete!</h2>
             <p>You've completed all tasks and earned {mission.totalReward} FUN points!</p>
-            <p style={{ fontSize: '14px', marginTop: '8px', opacity: 0.9 }}>
-              Click 🔄 above to reset for another demo
-            </p>
           </div>
         )}
 
@@ -242,7 +212,7 @@ function MissionPage() {
           <h3 className="tips-title">💡 Tips</h3>
           <ul className="tips-list">
             <li>✅ Complete tasks in any order you prefer</li>
-            <li>⭐ Follow recommended order for bonus points</li>
+            {/* <li>⭐ Follow recommended order for bonus points</li> */}
             <li>📍 All locations are within 10 min walk</li>
           </ul>
         </div>
@@ -262,7 +232,6 @@ function MissionPage() {
         </div>
 
         <ProgressBar current={completedCount} total={mission.tasks.length} />
-        <div></div>
       </div>
     </div>
   );
