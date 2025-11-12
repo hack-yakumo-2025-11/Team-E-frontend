@@ -1,0 +1,50 @@
+.initial_page {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+
+.initial_page_img {
+    position: relative;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+.initial_page_fun_button,
+.initial_page_open_scan_button, 
+.initial_page_click_scan_button, 
+.initial_page_close_scan_button {
+    position: absolute;
+    opacity: 0;
+    padding: 0;
+}
+
+.initial_page_fun_button {
+    left: 44.5vw;
+    bottom: 5vh;
+    width: 5vh;
+    height: 4.5vh;
+}
+
+.initial_page_open_scan_button {
+    right: 2vw;
+    bottom: 12.2vh;
+    width: 40vw;
+    height: 5vh;
+}
+
+.initial_page_click_scan_button {
+    left: 6vw;
+    bottom: 17vh;
+    width: 88vw;
+    height: 6vh;    
+}
+
+.initial_page_close_scan_button {
+    right: 6vw;
+    bottom: 70vh;
+    width: 3vh;
+    height: 3vh;
+}

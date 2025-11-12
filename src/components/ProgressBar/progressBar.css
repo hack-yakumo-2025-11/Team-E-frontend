@@ -1,56 +1,168 @@
-.progress-container {
+.progress-bar-container {
   background: white;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 71, 171, 0.1);
+  padding: 24px 20px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 71, 171, 0.1);
   margin-top: 20px;
   border: 1px solid #E6F2FF;
 }
 
-.progress-header {
+.progress-bar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 }
 
 .progress-label {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   color: #333;
 }
 
-.progress-count {
+.progress-percentage {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0047AB;
+}
+
+/* Progress Steps Container */
+.progress-steps {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+/* Progress Line (Background) */
+.progress-line {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  right: 20px;
+  height: 4px;
+  background-color: #E6F2FF;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+/* Progress Line Fill (Active/Completed portion) */
+.progress-line-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0047AB 0%, #1E90FF 100%);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* Step Wrapper for positioning */
+.progress-step-wrapper {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.progress-step-wrapper:first-child {
+  justify-content: flex-start;
+}
+
+.progress-step-wrapper:last-child {
+  justify-content: flex-end;
+}
+
+/* Individual Step Circle */
+.progress-step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #E6F2FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #999;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Completed Step */
+.progress-step.completed {
+  background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
+  border-color: #0047AB;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 71, 171, 0.3);
+}
+
+/* Add checkmark for completed steps except 0 */
+.progress-step.completed:not(:first-child)::after {
+  content: '✓';
+  position: absolute;
+  font-size: 18px;
+  color: white;
+}
+
+/* Hide number when showing checkmark */
+.progress-step.completed:not(:first-child) {
+  font-size: 0;
+}
+
+/* Keep showing number 0 */
+.progress-step:first-child {
+  background: #E6F2FF;
+  border-color: #0047AB;
+  color: #0047AB;
+}
+
+/* Progress Info */
+.progress-info {
+  text-align: center;
+  padding-top: 16px;
+  border-top: 1px solid #E6F2FF;
+}
+
+.tasks-completed {
   font-size: 14px;
   color: #666;
   font-weight: 600;
 }
 
-.progress-bar-wrapper {
-  width: 100%;
-  height: 32px;
-  background-color: #E6F2FF;
-  border-radius: 16px;
-  overflow: hidden;
-  position: relative;
+/* Animations */
+@keyframes stepComplete {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #0047AB 0%, #1E90FF 100%);
-  border-radius: 16px;
-  transition: width 0.5s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+.progress-step.completed {
+  animation: stepComplete 0.4s ease;
 }
 
-.progress-percentage {
-  color: white;
-  font-size: 14px;
-  font-weight: 700;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+/* Responsive adjustments */
+@media (max-width: 400px) {
+  .progress-step {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+  
+  .progress-steps {
+    padding: 0 10px;
+  }
+  
+  .progress-line {
+    left: 10px;
+    right: 10px;
+  }
 }
