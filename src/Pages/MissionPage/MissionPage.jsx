@@ -1,9 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import CountdownTimer from "../../components/countdownTimer/countdownTimer";
-import TaskCard from "../../components/TaskCard/TaskCard";
-import ProgressBar from "../../components/ProgressBar/ProgressBar";
-import "./MissionPage.css";
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import CountdownTimer from '../../components/countdownTimer/countdownTimer';
+import TaskCard from '../../components/TaskCard/TaskCard';
+import ProgressBar from '../../components/ProgressBar/ProgressBar';
+import { getMissionById } from '../../services/api';
+import './MissionPage.css';
+import BottomBar from '../../components/BottomBar';
 
 function MissionPage() {
   const navigate = useNavigate();
@@ -292,7 +294,10 @@ function MissionPage() {
         </div>
 
         <ProgressBar current={completedCount} total={mission.tasks.length} />
+
+       
       </div>
+       <BottomBar/>
     </div>
   );
 }

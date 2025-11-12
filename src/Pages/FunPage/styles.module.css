@@ -1,0 +1,45 @@
+.fun_page {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+
+.fun_page_img {
+    position: relative;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+.fun_page_initial_button,
+.fun_page_missions_button, 
+.fun_page_achievements_button {
+    position: absolute;
+    background: white;
+    border-radius: 20px;
+    z-index: 3;
+    padding: 0;
+}
+
+.fun_page_initial_button {
+    left: 5vw;
+    bottom: 5vh;
+    width: 5vh;
+    height: 4.5vh;
+    opacity: 0;
+}
+
+.fun_page_missions_button {
+    right: 22.5vw;
+    bottom: 59vh;
+    width: 6.5vh;
+    height: 4vh;
+}
+
+.fun_page_achievements_button {
+    right: 6vw;
+    bottom: 59vh;
+    width: 6.5vh;
+    height: 4vh;    
+}
