@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import CountdownTimer from "../../components/countdownTimer/countdownTimer";
 import TaskCard from "../../components/TaskCard/TaskCard";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
-import { getMissionById } from "../../services/api";
 import "./MissionPage.css";
 
 function MissionPage() {
@@ -15,12 +14,36 @@ function MissionPage() {
 
   const MISSION_ID = "m1";
 
-  const getDummyMission = useCallback((completed = []) => {
-    console.log("Creating dummy mission with completed tasks:", completed);
+  // ============================================
+  // KEY FEATURE: DATE-BASED RESET LOGIC
+  // ============================================
+  const checkAndResetForNewDay = useCallback((checkinDate) => {
+    const lastCheckinDate = localStorage.getItem("lastCheckinDate");
+    const today = new Date(checkinDate).toDateString();
+    
+    console.log("🔍 Checking dates...");
+    console.log("Last checkin:", lastCheckinDate);
+    console.log("Current checkin:", today);
+    
+    if (lastCheckinDate !== today) {
+      console.log("🔄 NEW DAY DETECTED! Resetting mission state...");
+      localStorage.setItem("lastCheckinDate", today);
+      localStorage.removeItem("completedTasks");
+      setCompletedTasks([]);
+      return true;
+    }
+    
+    console.log("✅ Same day - loading existing progress");
+    return false;
+  }, []);
 
+  // ============================================
+  // MISSION DATA (update with your locations)
+  // ============================================
+  const getDummyMission = useCallback((completed = []) => {
     return {
       id: "m1",
-      title: "Todays Mission",
+      title: "Today's Mission",
       description: "Explore 3 TDC spots before the game!",
       totalReward: 800,
       bonusReward: 100,
@@ -31,9 +54,9 @@ function MissionPage() {
           order: 1,
           type: "entertainment",
           title: "Thrilling Ride",
-          description: "Experience Big-O roller coaster",
-          locationId: "loc1",
-          locationName: "Big O",
+          description: "Experience Thunder Dolphin roller coaster",
+          locationId: "dolphin-location",
+          locationName: "Thunder Dolphin",
           distance: "400m",
           walkTime: "5 min",
           reward: 300,
@@ -43,10 +66,10 @@ function MissionPage() {
           id: "t2",
           order: 2,
           type: "food",
-          title: "Sweet Treats",
-          description: "Visit Half Saints BAKES",
-          locationId: "loc2",
-          locationName: "Half Saints BAKES",
+          title: "Ramen Experience",
+          description: "Visit Ichiran Ramen",
+          locationId: "ichiran-location",
+          locationName: "Ichiran Ramen",
           distance: "200m",
           walkTime: "3 min",
           reward: 100,
@@ -55,11 +78,11 @@ function MissionPage() {
         {
           id: "t3",
           order: 3,
-          type: "shopping",
-          title: "Fan Gear",
-          description: "Check out Giants Official Store",
-          locationId: "loc3",
-          locationName: "GIANTS OFFICIAL TEAM STORE",
+          type: "sports",
+          title: "Stadium Entry",
+          description: "Check in at Stadium Entrance",
+          locationId: "stadium-location",
+          locationName: "Stadium Entrance",
           distance: "300m",
           walkTime: "4 min",
           reward: 400,
@@ -68,44 +91,53 @@ function MissionPage() {
       ],
     };
   }, []);
-  // Load completed tasks from localStorage on mount
+
+  // ============================================
+  // INITIALIZE: Check date and load tasks
+  // ============================================
   useEffect(() => {
-    const saved = localStorage.getItem("completedTasks");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setCompletedTasks(parsed);
-        console.log("Loaded completed tasks from storage:", parsed);
-      } catch (error) {
-        console.error("Error parsing saved tasks:", error);
-        setCompletedTasks([]);
+    // Get checkin date from navigation state or use current date
+    const checkinDate = locationState.state?.checkinDate || new Date().toISOString();
+    const isNewDay = checkAndResetForNewDay(checkinDate);
+    
+    if (!isNewDay) {
+      // Load existing completed tasks
+      const saved = localStorage.getItem("completedTasks");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setCompletedTasks(parsed);
+          console.log("📥 Loaded existing tasks:", parsed);
+        } catch (error) {
+          console.error("❌ Error parsing saved tasks:", error);
+          setCompletedTasks([]);
+        }
       }
     }
-  }, []);
+  }, [locationState.state?.checkinDate, checkAndResetForNewDay]);
 
-  // Handle completed task from LocationDetailPage
+  // ============================================
+  // HANDLE TASK COMPLETION from LocationPage
+  // ============================================
   useEffect(() => {
     if (locationState.state?.completedTaskId) {
       const taskId = locationState.state.completedTaskId;
 
       setCompletedTasks((prevTasks) => {
-        console.log("Received completed task:", taskId);
-        console.log("Current completed tasks:", prevTasks);
-
         if (prevTasks.includes(taskId)) {
-          return prevTasks; // Already completed
+          console.log("⚠️ Task already completed");
+          return prevTasks;
         }
 
         const newCompletedTasks = [...prevTasks, taskId];
-        console.log("New completed tasks list:", newCompletedTasks);
-
+        console.log("✅ New completed tasks:", newCompletedTasks);
+        
         // Save to localStorage
-        localStorage.setItem(
-          "completedTasks",
-          JSON.stringify(newCompletedTasks)
-        );
-        console.log("Saved to localStorage:", newCompletedTasks);
-
+        localStorage.setItem("completedTasks", JSON.stringify(newCompletedTasks));
+        
+        // Update achievements
+        updateAchievements(taskId);
+        
         return newCompletedTasks;
       });
 
@@ -114,16 +146,44 @@ function MissionPage() {
     }
   }, [locationState.state?.completedTaskId, navigate]);
 
-  // Fetch mission on mount and when completedTasks changes
+  // ============================================
+  // UPDATE ACHIEVEMENTS when task completed
+  // ============================================
+  const updateAchievements = (taskId) => {
+    const taskTypes = {
+      't1': 'entertainment',
+      't2': 'food',
+      't3': 'sports' // Maps to shopping in achievements
+    };
+
+    const achievements = JSON.parse(
+      localStorage.getItem("achievements") || 
+      '{"food": 0, "entertainment": 0, "shopping": 0}'
+    );
+    
+    const type = taskTypes[taskId];
+    console.log("🏆 Updating achievement:", type);
+    
+    if (type === "food") achievements.food += 1;
+    if (type === "entertainment") achievements.entertainment += 1;
+    if (type === "sports") achievements.shopping += 1;
+
+    localStorage.setItem("achievements", JSON.stringify(achievements));
+    console.log("💾 Saved achievements:", achievements);
+  };
+
+  // ============================================
+  // FETCH MISSION (update with your API)
+  // ============================================
   useEffect(() => {
     const fetchMission = async () => {
       try {
         setLoading(true);
-        const response = await getMissionById(MISSION_ID);
-        setMission(response.data);
-      } catch (error) {
-        console.error("Error fetching mission:", error);
-        console.log("Using dummy data with completed tasks:", completedTasks);
+        // Replace with your API call
+        // const response = await getMissionById(MISSION_ID);
+        // setMission(response.data);
+        
+        // For now, use dummy data
         setMission(getDummyMission(completedTasks));
       } finally {
         setLoading(false);
@@ -131,28 +191,30 @@ function MissionPage() {
     };
 
     fetchMission();
-  }, [getDummyMission, completedTasks, MISSION_ID]);
+  }, [getDummyMission, completedTasks]);
 
+  // ============================================
+  // HANDLE TASK CLICK
+  // ============================================
   const handleTaskClick = (task) => {
     if (task.completed) {
-      console.log("Task already completed, not navigating");
+      console.log("⚠️ Task already completed");
       return;
     }
 
-    console.log("Navigating to task:", task.id);
+    console.log("🎯 Navigating to task:", task.id);
     navigate(`/location/${task.locationId}`, {
       state: { task, missionId: mission.id },
     });
-  };
-
-  const getRecommendedTask = () => {
-    return mission?.tasks.find((task) => !task.completed);
   };
 
   const getCompletedCount = () => {
     return mission?.tasks.filter((t) => t.completed).length || 0;
   };
 
+  // ============================================
+  // RENDER
+  // ============================================
   if (loading) {
     return (
       <div className="mission-page">
@@ -169,7 +231,6 @@ function MissionPage() {
     );
   }
 
-  const recommendedTask = getRecommendedTask();
   const completedCount = getCompletedCount();
   const allTasksComplete = completedCount === mission.tasks.length;
 
@@ -189,8 +250,7 @@ function MissionPage() {
           <div className="mission-complete-banner">
             <h2>🎉 Mission Complete!</h2>
             <p>
-              You've completed all tasks and earned {mission.totalReward} FUN
-              points!
+              You've earned {mission.totalReward} FUN points!
             </p>
           </div>
         )}
@@ -204,27 +264,21 @@ function MissionPage() {
                 Total Reward: {mission.totalReward} FUN
               </span>
             </div>
-            <div className="bonus-info">
-              <span className="bonus-icon">⭐</span>
-              <span className="bonus-text">
-                +{mission.bonusReward} bonus for completing in order!
-              </span>
-            </div>
           </div>
         </div>
 
         <div className="tips-card">
           <h3 className="tips-title">💡 Tips</h3>
           <ul className="tips-list">
-            <li>✅ Complete tasks in any order you prefer</li>
-            {/* <li>⭐ Follow recommended order for bonus points</li> */}
-            <li>📍 All locations are within 10 min walk</li>
+            <li>✅ Complete tasks in any order</li>
+            <li>📍 All locations within 10 min walk</li>
+            <li>🏆 Build your achievement badges!</li>
           </ul>
         </div>
 
         <div className="task-list">
           <h2 className="section-title">
-            Your Tasks ({completedCount}/{mission.tasks.length} completed)
+            Your Tasks ({completedCount}/{mission.tasks.length})
           </h2>
           {mission.tasks.map((task, index) => (
             <TaskCard
@@ -232,7 +286,6 @@ function MissionPage() {
               task={task}
               taskNumber={index + 1}
               isCompleted={task.completed}
-              isRecommended={recommendedTask?.id === task.id}
               onClick={() => handleTaskClick(task)}
             />
           ))}
