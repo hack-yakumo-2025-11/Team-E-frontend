@@ -10,11 +10,11 @@ const api = axios.create({
 });
 
 export const getMissions = (userId) => {
-  return api.get(`/missions/${userId}`);
+  return api.get(`/mission-page/${userId}`);
 };
 
 export const getMissionById = (missionId) => {
-  return api.get(`/missions/detail/${missionId}`);
+  return api.get(`/mission-page/detail/${missionId}`);
 };
 
 export const getLocationById = (locationId) => {
