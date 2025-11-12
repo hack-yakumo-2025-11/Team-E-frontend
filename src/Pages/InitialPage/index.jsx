@@ -8,6 +8,27 @@ function InitialPage() {
   const [backImage, setBackImage] = useState(false);
   const navigate = useNavigate();
 
+
+  const handleCheckIn = () => {
+    console.log("New check-in detected - resetting mission tasks");
+    
+    const currentDate = new Date().toISOString();
+
+    localStorage.removeItem("completedTasks");
+    
+  
+    localStorage.setItem("lastCheckinDate", new Date().toDateString());
+    
+    console.log("Mission reset complete - navigating to mission page");
+
+    navigate('/mission-page', {
+      state: {
+        checkinDate: currentDate,
+        isNewCheckIn: true
+      }
+    });
+  };
+
   return (
     <div className={styles.initial_page}>
         <img 
@@ -26,7 +47,7 @@ function InitialPage() {
         />
         <button 
           className={styles.initial_page_click_scan_button}
-          onClick={() => navigate('/missions')}
+          onClick={handleCheckIn}
           style={{zIndex: backImage * 3}}
         />
         <button 

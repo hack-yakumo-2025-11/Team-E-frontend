@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Html5QrcodeScanner } from "html5-qrcode";
-import { ArrowLeft } from "lucide-react";
 import "./LocationPage.css";
 
 function LocationDetailPage() {
@@ -37,7 +36,7 @@ function LocationDetailPage() {
         "stadium-location": {
           id: "stadium-location",
           name: "Stadium Entrance",
-          screenshotUrl: "/screenshots/half-saints.png",
+          screenshotUrl: "/screenshots/giants-store.png",
           specialBarcode: "TDC-STADIUM-001",
         },
       };
@@ -48,10 +47,6 @@ function LocationDetailPage() {
     const fetchLocation = async () => {
       try {
         setLoading(true);
-        // Replace with your API call
-        // const response = await getLocationById(locationId);
-        // setLocationData(response.data);
-        
         setLocationData(getDummyLocation());
       } catch (error) {
         console.error("Error fetching location:", error);
@@ -81,19 +76,31 @@ function LocationDetailPage() {
   // COMPLETE TASK - KEY FUNCTION
   // ============================================
   const handleTaskCompletion = async () => {
-    try {
-      // Optional: If you add API later, uncomment this:
-      // const response = await completeTask({
-      //   userId: "u1",
-      //   missionId: location.state?.missionId,
-      //   taskId: task.id,
-      //   locationId: locationId,
-      // });
+    if (!task) {
+      console.error("❌ No task data available");
+      navigate("/mission-page");
+      return;
+    }
 
+    try {
       console.log("✅ Task completed:", task.id);
 
-      // Navigate back with completedTaskId
-      navigate("/", {
+      // Get current completed tasks from localStorage
+      const savedTasks = localStorage.getItem("completedTasks");
+      const completedTasks = savedTasks ? JSON.parse(savedTasks) : [];
+
+      // Add this task if not already completed
+      if (!completedTasks.includes(task.id)) {
+        const updatedTasks = [...completedTasks, task.id];
+        localStorage.setItem("completedTasks", JSON.stringify(updatedTasks));
+        console.log("💾 Updated completed tasks:", updatedTasks);
+
+        // Update achievements
+        updateAchievements(task.id);
+      }
+
+      // Navigate back to mission page with completion state
+      navigate("/mission-page", {
         state: {
           completedTaskId: task.id,
           taskReward: task.reward,
@@ -102,7 +109,7 @@ function LocationDetailPage() {
     } catch (error) {
       console.error("Error completing task:", error);
       
-      // Still navigate back even if API fails
+      // Still navigate back even if something fails
       navigate("/", {
         state: {
           completedTaskId: task.id,
@@ -113,53 +120,47 @@ function LocationDetailPage() {
   };
 
   // ============================================
-  // BARCODE SCANNING (Real mode)
+  // UPDATE ACHIEVEMENTS
   // ============================================
-  const onScanSuccess = async (decodedText) => {
-    console.log("📱 Scanned:", decodedText);
+  const updateAchievements = (taskId) => {
+    const taskTypes = {
+      't1': 'entertainment',
+      't2': 'food',
+      't3': 'shopping'
+    };
 
-    if (scanner) {
-      scanner.clear().catch((err) => console.log("Scanner clear error:", err));
-    }
-
-    setScanning(false);
-
-    if (decodedText === locationData.specialBarcode) {
-      await handleTaskCompletion();
-    } else {
-      alert("❌ Invalid barcode! Please scan the correct mission barcode.");
-    }
-  };
-
-  const onScanError = (error) => {
-    console.warn("Scan error:", error);
-  };
-
-  const startScanning = () => {
-    setScanning(true);
-
-    const html5QrcodeScanner = new Html5QrcodeScanner(
-      "qr-reader",
-      { fps: 10, qrbox: 250 },
-      false
+    const achievements = JSON.parse(
+      localStorage.getItem("achievements") || 
+      '{"food": 0, "entertainment": 0, "shopping": 0}'
     );
+    
+    const type = taskTypes[taskId];
+    console.log("🏆 Updating achievement:", type);
+    
+    if (type === "food") achievements.food += 1;
+    if (type === "entertainment") achievements.entertainment += 1;
+    if (type === "shopping") achievements.shopping += 1;
 
-    html5QrcodeScanner.render(onScanSuccess, onScanError);
-    setScanner(html5QrcodeScanner);
+    localStorage.setItem("achievements", JSON.stringify(achievements));
+    console.log("💾 Saved achievements:", achievements);
   };
 
-  const stopScanning = () => {
-    if (scanner) {
-      scanner.clear().catch((err) => console.log("Scanner stop error:", err));
+  // ============================================
+  // CHECK-IN HANDLER
+  // ============================================
+  const handleCheckIn = async () => {
+    console.log("📍 Check-in button clicked for task:", task?.id);
+    
+    // Show a quick feedback animation
+    const button = document.querySelector('.checkin-button-overlay');
+    if (button) {
+      button.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = 'scale(1)';
+      }, 150);
     }
-    setScanning(false);
-  };
 
-  // ============================================
-  // DEMO MODE - Instant completion
-  // ============================================
-  const handleDemoScan = async () => {
-    console.log("🎮 Demo mode - auto completing task");
+    // Complete the task and navigate back
     await handleTaskCompletion();
   };
 
@@ -172,10 +173,12 @@ function LocationDetailPage() {
 
   return (
     <div className="location-page-screenshot">
-      {/* Back button overlay */}
-      <button className="back-btn-overlay" onClick={() => navigate(-1)}>
-        <ArrowLeft size={28} color="white" />
-      </button>
+      {/* Back button overlay - transparent clickable area on grey back arrow */}
+      <button 
+        className="back-btn-overlay" 
+        onClick={() => navigate("/mission-page")} 
+        aria-label="Go back"
+      />
 
       {/* Screenshot of existing TDC location page */}
       <div className="screenshot-container">
@@ -186,9 +189,9 @@ function LocationDetailPage() {
         />
       </div>
 
-      {/* Check-in button overlaid on screenshot (similar to Image 2) */}
+      {/* Check-in button overlaid on screenshot - below Map button */}
       {task && (
-        <button className="checkin-button-overlay" onClick={handleDemoScan}>
+        <button className="checkin-button-overlay" onClick={handleCheckIn}>
           <span className="checkin-icon">📍</span>
           <span className="checkin-text">チェックイン</span>
         </button>
