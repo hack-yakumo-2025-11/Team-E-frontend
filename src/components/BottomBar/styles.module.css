@@ -1,4 +1,4 @@
-.bottom-bar{
+.bottom_bar{
     background: white;
     display: flex;
     flex-direction: row;
@@ -12,22 +12,30 @@
     border-top: 1px solid #e0e0e0;
 }
 
-.bottom-bar img {
+.bottom_bar img {
     width: 100%;
     height: auto;
     display: block;
 }
 
-.center-button {
+.bottom_bar_initial_button,
+.bottom_bar_achievements_button {
     position: absolute;
-    width: 7vh;
-    height: 7vh;
     z-index: 3;
-    opacity: 0;
     padding: 0;
+    opacity: 0;
 }
 
-.center-button:hover {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
+.bottom_bar_initial_button {
+    left: 5vw;
+    bottom: 5vh;
+    width: 5vh;
+    height: 4.5vh;
+}
+
+.bottom_bar_achievements_button {
+    left: 44.5vw;
+    bottom: 5vh;
+    width: 5vh;
+    height: 4.5vh;
 }

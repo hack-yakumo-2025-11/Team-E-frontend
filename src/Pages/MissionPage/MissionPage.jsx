@@ -5,7 +5,7 @@ import TaskCard from '../../components/TaskCard/TaskCard';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import { getMissionById } from '../../services/api';
 import './MissionPage.css';
-import BottomBar from '../../components/BottomBar/BottobBar';
+import BottomBar from '../../components/BottomBar';
 
 function MissionPage() {
   const navigate = useNavigate();

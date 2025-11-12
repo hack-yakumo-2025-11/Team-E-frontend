@@ -26,7 +26,7 @@ function InitialPage() {
         />
         <button 
           className={styles.initial_page_click_scan_button}
-          onClick={() => console.log('-')}
+          onClick={() => navigate('/missions')}
           style={{zIndex: backImage * 3}}
         />
         <button 

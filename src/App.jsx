@@ -13,7 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<InitialPage />} />
           <Route path="/fun" element={<FunPage />} />
-          {/* <Route path="/missions" element={<MissionPage />} /> */}
+          <Route path="/missions" element={<MissionPage />} />
           {/* <Route path="/mission/:missionId" element={<MissionPage />} /> */}
           <Route path="/location/:locationId" element={<LocationDetailPage />} />
           {/* //<Route path="/achievements" element={<AchievementsPage />} /> */}
