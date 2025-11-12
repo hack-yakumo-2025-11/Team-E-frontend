@@ -11,7 +11,7 @@ function CountdownTimer({ expiryTime }) {
       const difference = expiry - now;
 
       if (difference <= 0) {
-        setTimeLeft('EXPIRED');
+        setTimeLeft('期限切れ');
         return;
       }
 
@@ -36,7 +36,7 @@ function CountdownTimer({ expiryTime }) {
     <div className="countdown-timer">
       <div className="timer-icon">⏰</div>
       <div className="timer-text">
-        <div className="timer-label">TIME LEFT</div>
+        <div className="timer-label">残り時間</div>
         <div className="timer-value">{timeLeft}</div>
       </div>
     </div>
