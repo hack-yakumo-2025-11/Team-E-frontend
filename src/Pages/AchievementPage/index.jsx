@@ -101,7 +101,10 @@ function AchievementsPage() {
 
     return (
         <div className={styles.achievements_page}>
-            <div></div>
+            <div className={styles.achievements_page_title}>
+                <span>🏆</span>
+                Achievements
+            </div>
 
             <div className={styles.achievements_page_container}>
                 {
@@ -110,7 +113,7 @@ function AchievementsPage() {
                             <div 
                                 id={ach.name} 
                                 className={styles.achievements_page_segment}
-                                style={{maxHeight: shownList === index ? `${12 + 3 * ach.fullList.length}vh` : '12 vh'}}
+                                style={{maxHeight: shownList === index ? `${15 + 4 * ach.fullList.length}vh` : '15 vh'}}
                             >
                                 <div className={styles.achievements_page_segment_title}>
                                     <img src={ach.image} />
