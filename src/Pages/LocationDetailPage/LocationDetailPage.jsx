@@ -24,7 +24,7 @@ function LocationDetailPage() {
         "dolphin-location": {
           id: "dolphin-location",
           name: "Thunder Dolphin",
-          screenshotUrl: "/screenshots/big-o.png",
+          screenshotUrl: "/screenshots/giants-store.png",
           specialBarcode: "TDC-DOLPHIN-001",
         },
         "ichiran-location": {
