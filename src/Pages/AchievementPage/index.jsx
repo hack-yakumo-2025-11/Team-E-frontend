@@ -110,7 +110,7 @@ function AchievementsPage() {
                             <div 
                                 id={ach.name} 
                                 className={styles.achievements_page_segment}
-                                style={{height: shownList === index ? `${12 + 3 * ach.fullList.length}vh` : '12 vh'}}
+                                style={{maxHeight: shownList === index ? `${12 + 3 * ach.fullList.length}vh` : '12 vh'}}
                             >
                                 <div className={styles.achievements_page_segment_title}>
                                     <img src={ach.image} />
