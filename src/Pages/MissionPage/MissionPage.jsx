@@ -264,8 +264,9 @@ function MissionPage() {
 
         <ProgressBar current={completedCount} total={mission.tasks.length} />
 
-        <BottomBar />
+       
       </div>
+       <BottomBar/>
     </div>
   );
 }

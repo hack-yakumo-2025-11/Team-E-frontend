@@ -7,7 +7,7 @@ import LocationDetailPage from './Pages/LocationDetailPage/LocationDetailPage';
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div className="app-container">
         <Routes>
           <Route path="/" element={<MissionPage />} />
           {/* <Route path="/mission/:missionId" element={<MissionPage />} /> */}
