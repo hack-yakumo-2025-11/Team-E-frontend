@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import CountdownTimer from '../../components/countdownTimer/countdownTimer';
 import TaskCard from '../../components/TaskCard/TaskCard';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
-import { getMissionById } from '../../services/api';
 import './MissionPage.css';
 import BottomBar from '../../components/BottomBar';
 
@@ -16,115 +15,143 @@ function MissionPage() {
 
   const MISSION_ID = "m1";
 
+  // ============================================
+  // MISSION DATA - Japanese Theme
+  // ============================================
   const getDummyMission = useCallback((completed = []) => {
-    console.log("Creating dummy mission with completed tasks:", completed);
-
     return {
       id: "m1",
-      title: "Todays Mission",
-      description: "Explore 3 TDC spots before the game!",
-      totalReward: 800,
+      title: "今日のミッション",
+      description: "試合前に東京ドームシティを探索しよう！",
+      totalReward: 70,
       bonusReward: 100,
       expiryTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
       tasks: [
         {
           id: "t1",
           order: 1,
-          type: "entertainment",
-          title: "Thrilling Ride",
-          description: "Experience Big-O roller coaster",
-          locationId: "loc1",
-          locationName: "Big O",
-          distance: "400m",
-          walkTime: "5 min",
-          reward: 300,
+          type: "food",
+          title: "ラーメンハント",
+          description: "美味しいラーメンを探しに行こう",
+          locationId: "ramen-location",
+          locationName: "ラーメン通り",
+          distance: "200m",
+          walkTime: "3分",
+          reward: 10,
           completed: completed.includes("t1"),
         },
         {
           id: "t2",
           order: 2,
-          type: "food",
-          title: "Sweet Treats",
-          description: "Visit Half Saints BAKES",
-          locationId: "loc2",
-          locationName: "Half Saints BAKES",
-          distance: "200m",
-          walkTime: "3 min",
-          reward: 100,
+          type: "shopping",
+          title: "お土産ショッピング",
+          description: "ショッピングエリアでお土産を見つけよう",
+          locationId: "shopping-location",
+          locationName: "ショッピングエリア",
+          distance: "150m",
+          walkTime: "2分",
+          reward: 25,
           completed: completed.includes("t2"),
         },
         {
           id: "t3",
           order: 3,
-          type: "shopping",
-          title: "Fan Gear",
-          description: "Check out Giants Official Store",
-          locationId: "loc3",
-          locationName: "GIANTS OFFICIAL TEAM STORE",
+          type: "entertainment",
+          title: "動物園訪問",
+          description: "小さな動物園で癒されよう",
+          locationId: "zoo-location",
+          locationName: "ミニ動物園",
           distance: "300m",
-          walkTime: "4 min",
-          reward: 400,
+          walkTime: "4分",
+          reward: 35,
           completed: completed.includes("t3"),
         },
       ],
     };
   }, []);
-  // Load completed tasks from localStorage on mount
+
+  // ============================================
+  // INITIALIZE: Handle new check-in or load existing progress
+  // ============================================
   useEffect(() => {
-    const saved = localStorage.getItem("completedTasks");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setCompletedTasks(parsed);
-        console.log("Loaded completed tasks from storage:", parsed);
-      } catch (error) {
-        console.error("Error parsing saved tasks:", error);
-        setCompletedTasks([]);
+    if (locationState.state?.isNewCheckIn) {
+      console.log("🎯 新しいチェックイン: 新しいミッション開始");
+      setCompletedTasks([]);
+      navigate(window.location.pathname, { replace: true, state: {} });
+    } else {
+      const saved = localStorage.getItem("completedTasks");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setCompletedTasks(parsed);
+          console.log("📥 保存されたタスク:", parsed);
+        } catch (error) {
+          console.error("❌ タスク読み込みエラー:", error);
+          setCompletedTasks([]);
+        }
       }
     }
-  }, []);
+  }, [locationState.state?.isNewCheckIn, navigate]);
 
-  // Handle completed task from LocationDetailPage
+  // ============================================
+  // HANDLE TASK COMPLETION from LocationPage
+  // ============================================
   useEffect(() => {
     if (locationState.state?.completedTaskId) {
       const taskId = locationState.state.completedTaskId;
 
       setCompletedTasks((prevTasks) => {
-        console.log("Received completed task:", taskId);
-        console.log("Current completed tasks:", prevTasks);
-
         if (prevTasks.includes(taskId)) {
-          return prevTasks; // Already completed
+          console.log("⚠️ タスク完了済み");
+          return prevTasks;
         }
 
         const newCompletedTasks = [...prevTasks, taskId];
-        console.log("New completed tasks list:", newCompletedTasks);
-
-        // Save to localStorage
-        localStorage.setItem(
-          "completedTasks",
-          JSON.stringify(newCompletedTasks)
-        );
-        console.log("Saved to localStorage:", newCompletedTasks);
-
+        console.log("✅ 新しい完了タスク:", newCompletedTasks);
+        
+        localStorage.setItem("completedTasks", JSON.stringify(newCompletedTasks));
+        updateAchievements(taskId);
+        
         return newCompletedTasks;
       });
 
-      // Clear navigation state
       navigate(window.location.pathname, { replace: true, state: {} });
     }
   }, [locationState.state?.completedTaskId, navigate]);
 
-  // Fetch mission on mount and when completedTasks changes
+  // ============================================
+  // UPDATE ACHIEVEMENTS when task completed
+  // ============================================
+  const updateAchievements = (taskId) => {
+    const taskTypes = {
+      't1': 'food',
+      't2': 'shopping',
+      't3': 'entertainment'
+    };
+
+    const achievements = JSON.parse(
+      localStorage.getItem("achievements") || 
+      '{"food": 0, "entertainment": 0, "shopping": 0}'
+    );
+    
+    const type = taskTypes[taskId];
+    console.log("🏆 アチーブメント更新:", type);
+    
+    if (type === "food") achievements.food += 1;
+    if (type === "entertainment") achievements.entertainment += 1;
+    if (type === "shopping") achievements.shopping += 1;
+
+    localStorage.setItem("achievements", JSON.stringify(achievements));
+    console.log("💾 保存されたアチーブメント:", achievements);
+  };
+
+  // ============================================
+  // FETCH MISSION
+  // ============================================
   useEffect(() => {
     const fetchMission = async () => {
       try {
         setLoading(true);
-        const response = await getMissionById(MISSION_ID);
-        setMission(response.data);
-      } catch (error) {
-        console.error("Error fetching mission:", error);
-        console.log("Using dummy data with completed tasks:", completedTasks);
         setMission(getDummyMission(completedTasks));
       } finally {
         setLoading(false);
@@ -132,32 +159,42 @@ function MissionPage() {
     };
 
     fetchMission();
-  }, [getDummyMission, completedTasks, MISSION_ID]);
+  }, [getDummyMission, completedTasks]);
 
+  // ============================================
+  // HANDLE TASK CLICK
+  // ============================================
   const handleTaskClick = (task) => {
     if (task.completed) {
-      console.log("Task already completed, not navigating");
+      console.log("⚠️ タスク完了済み");
       return;
     }
 
-    console.log("Navigating to task:", task.id);
+    console.log("🎯 タスクに移動:", task.id);
     navigate(`/location/${task.locationId}`, {
       state: { task, missionId: mission.id },
     });
   };
 
-  const getRecommendedTask = () => {
-    return mission?.tasks.find((task) => !task.completed);
+  // ============================================
+  // HANDLE FUN PAGE REDIRECT
+  // ============================================
+  const handleGoToFunPage = () => {
+    console.log("🎉 FUNページへ移動");
+    navigate('/fun');
   };
 
   const getCompletedCount = () => {
     return mission?.tasks.filter((t) => t.completed).length || 0;
   };
 
+  // ============================================
+  // RENDER
+  // ============================================
   if (loading) {
     return (
       <div className="mission-page">
-        <div className="loading">Loading mission...</div>
+        <div className="loading">ミッションを読み込み中...</div>
       </div>
     );
   }
@@ -165,12 +202,11 @@ function MissionPage() {
   if (!mission) {
     return (
       <div className="mission-page">
-        <div className="error">No mission available</div>
+        <div className="error">ミッションが見つかりません</div>
       </div>
     );
   }
 
-  const recommendedTask = getRecommendedTask();
   const completedCount = getCompletedCount();
   const allTasksComplete = completedCount === mission.tasks.length;
 
@@ -188,11 +224,18 @@ function MissionPage() {
 
         {allTasksComplete && (
           <div className="mission-complete-banner">
-            <h2>🎉 Mission Complete!</h2>
+            <h2>🎉 ミッション完了！</h2>
             <p>
-              You've completed all tasks and earned {mission.totalReward} FUN
-              points!
+              {mission.totalReward} FUNポイントを獲得しました！
             </p>
+            <button 
+              className="fun-page-button" 
+              onClick={handleGoToFunPage}
+              aria-label="Go to FUN page"
+            >
+              <span className="fun-icon">🎮</span>
+              <span className="fun-text">FUNを見る</span>
+            </button>
           </div>
         )}
 
@@ -202,30 +245,24 @@ function MissionPage() {
             <div className="mission-reward">
               <span className="reward-icon">🎁</span>
               <span className="reward-text">
-                Total Reward: {mission.totalReward} FUN
-              </span>
-            </div>
-            <div className="bonus-info">
-              <span className="bonus-icon">⭐</span>
-              <span className="bonus-text">
-                +{mission.bonusReward} bonus for completing in order!
+                合計報酬: {mission.totalReward} FUN
               </span>
             </div>
           </div>
         </div>
 
         <div className="tips-card">
-          <h3 className="tips-title">💡 Tips</h3>
+          <h3 className="tips-title">💡 ヒント</h3>
           <ul className="tips-list">
-            <li>✅ Complete tasks in any order you prefer</li>
-            {/* <li>⭐ Follow recommended order for bonus points</li> */}
-            <li>📍 All locations are within 10 min walk</li>
+            <li>✅ タスクは順不同で完了できます</li>
+            <li>📍 すべての場所は徒歩10分圏内です</li>
+            <li>🏆 アチーブメントバッジを集めよう！</li>
           </ul>
         </div>
 
         <div className="task-list">
           <h2 className="section-title">
-            Your Tasks ({completedCount}/{mission.tasks.length} completed)
+            あなたのタスク ({completedCount}/{mission.tasks.length})
           </h2>
           {mission.tasks.map((task, index) => (
             <TaskCard
@@ -233,17 +270,14 @@ function MissionPage() {
               task={task}
               taskNumber={index + 1}
               isCompleted={task.completed}
-              isRecommended={recommendedTask?.id === task.id}
               onClick={() => handleTaskClick(task)}
             />
           ))}
         </div>
 
         <ProgressBar current={completedCount} total={mission.tasks.length} />
-
-       
       </div>
-       <BottomBar/>
+      <BottomBar/>
     </div>
   );
 }

@@ -29,13 +29,13 @@ function TaskCard({ task, taskNumber, isCompleted, isRecommended, onClick }) {
     >
       {isRecommended && !isCompleted && (
         <div className="recommended-badge">
-          ⭐ RECOMMENDED NEXT
+          ⭐ 次におすすめ
         </div>
       )}
       
       {isCompleted && (
         <div className="completed-badge">
-          ✅ COMPLETED
+          ✅ 完了
         </div>
       )}
 
@@ -44,7 +44,7 @@ function TaskCard({ task, taskNumber, isCompleted, isRecommended, onClick }) {
           {getTypeIcon(task.type)}
         </div>
 
-        <h3 className="task-title">Task {taskNumber}: {task.title}</h3>
+        <h3 className="task-title">タスク {taskNumber}: {task.title}</h3>
         
         <div className="task-reward">+{task.reward} FUN</div>
 
@@ -57,7 +57,7 @@ function TaskCard({ task, taskNumber, isCompleted, isRecommended, onClick }) {
 
         <div className="task-meta">
           <span className="walk-icon">🚶</span>
-          <span className="walk-time">{task.walkTime} • {task.distance} away</span>
+          <span className="walk-time">{task.walkTime} • {task.distance} 先</span>
         </div>
       </div>
     </div>

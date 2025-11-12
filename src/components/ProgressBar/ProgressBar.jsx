@@ -9,7 +9,7 @@ function ProgressBar({ current, total }) {
   return (
     <div className="progress-bar-container">
       <div className="progress-bar-header">
-        <span className="progress-label">Mission Progress</span>
+        <span className="progress-label">ミッション進捗</span>
         <span className="progress-percentage">{percentage}%</span>
       </div>
 
@@ -33,7 +33,7 @@ function ProgressBar({ current, total }) {
       </div>
 
       <div className="progress-info">
-        <span className="tasks-completed">{current} of {total} tasks completed</span>
+        <span className="tasks-completed">{current} / {total} タスク完了</span>
       </div>
     </div>
   );

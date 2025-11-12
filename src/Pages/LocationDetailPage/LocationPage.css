@@ -1,178 +1,131 @@
 .location-page-screenshot {
+  height: 100vh;
   min-height: 100vh;
-  background-color: #000;
+  background-color: #F5F7FA;
   position: relative;
   overflow: hidden;
 }
 
-/* Back button overlay - positioned absolute on top of screenshot */
-.back-btn-overlay {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 100;
-  background: rgba(0, 71, 171, 0.9);
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 12px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-}
-
-/* Screenshot container - takes full width */
+/* Screenshot container should fill the parent */
 .screenshot-container {
   width: 100%;
-  max-height: 70vh;
-  overflow: hidden;
+  height: 100%;
   position: relative;
 }
 
+/* Image stretches to fill height; keep aspect with object-fit */
 .location-screenshot {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   object-fit: cover;
 }
 
-/* Demo overlay section - your custom buttons at bottom */
-.demo-overlay-section {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(135deg, #FFF8E1 0%, #FFE082 100%);
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  padding: 24px 20px 32px 20px;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
-  z-index: 50;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-.demo-section-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.demo-section-header h3 {
-  font-size: 20px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.demo-section-header p {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
-}
-
-.demo-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Demo complete button - Green */
-.demo-complete-btn {
-  width: 100%;
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-  color: white;
+/* Back button - transparent clickable overlay on red circle area (top-left) */
+.back-btn-overlay {
+  position: absolute;
+  left: 10px;
+  top: 55px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: transparent;
   border: none;
-  border-radius: 12px;
-  padding: 18px;
-  font-size: 18px;
-  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  z-index: 100;
+  transition: opacity 0.2s ease;
 }
 
-.demo-complete-btn:hover {
-  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+.back-btn-overlay:active {
+  opacity: 0.5;
 }
 
-/* Demo scan button - Blue */
-.demo-scan-btn {
-  width: 100%;
+/* Check-in button overlay - positioned at bottom center where red arrow points */
+.checkin-button-overlay {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
   color: white;
   border: none;
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 28px;
+  padding: 14px 40px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 71, 171, 0.4);
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 71, 171, 0.3);
+  z-index: 50;
+  min-width: 160px;
 }
 
-.demo-scan-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 71, 171, 0.4);
+.checkin-button-overlay:active {
+  transform: translateX(-50%) scale(0.95);
 }
 
-.demo-helper-text {
-  text-align: center;
-  font-size: 13px;
-  color: #666;
-  margin: 8px 0 0 0;
+.checkin-icon {
+  font-size: 20px;
 }
 
-/* Scanner wrapper */
-.scanner-wrapper {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-}
-
-.cancel-scan-btn {
-  width: 100%;
-  background: #f44336;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 12px;
-}
-
-.loading {
-  text-align: center;
-  padding: 40px 20px;
+.checkin-text {
   font-size: 16px;
+  font-weight: 700;
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 18px;
   color: #666;
 }
-```
 
----
+/* Responsive adjustments for smaller screens */
+@media (max-width: 480px) {
+  .back-btn-overlay {
+    left: 8px;
+    top: 52px;
+    width: 42px;
+    height: 42px;
+  }
 
-## **📸 HOW TO USE SCREENSHOTS:**
+  .checkin-button-overlay {
+    bottom: 15px;
+    padding: 12px 36px;
+    font-size: 15px;
+    min-width: 150px;
+  }
 
-### **Step 1: Take Screenshots**
+  .checkin-icon {
+    font-size: 18px;
+  }
 
-From the existing TDC app, take 3 screenshots:
-1. Ichiran Ramen location page
-2. Stadium entrance location page  
-3. Thunder Dolphin location page
+  .checkin-text {
+    font-size: 15px;
+  }
+}
 
-### **Step 2: Save Screenshots**
+/* Adjustments for taller screens */
+@media (min-height: 800px) {
+  .checkin-button-overlay {
+    bottom: 25px;
+  }
+  
+  .back-btn-overlay {
+    top: 58px;
+  }
+}
 
-In your project:
-```
-frontend/
-├── public/
-│   └── screenshots/
-│       ├── ichiran-location.png
-│       ├── stadium-location.png
-│       └── dolphin-location.png
+/* Adjustments for very tall screens */
+@media (min-height: 900px) {
+  .checkin-button-overlay {
+    bottom: 30px;
+  }
+}

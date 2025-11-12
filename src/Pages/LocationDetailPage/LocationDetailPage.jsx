@@ -1,8 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Html5QrcodeScanner } from "html5-qrcode";
-import { getLocationById, completeTask } from "../../services/api";
-import { ArrowLeft } from "lucide-react";
 import "./LocationPage.css";
 
 function LocationDetailPage() {
@@ -10,54 +8,60 @@ function LocationDetailPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { task, missionId } = location.state || {};
+  const { task } = location.state || {};
 
   const [locationData, setLocationData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [scanning, setScanning] = useState(false);
   const [scanner, setScanner] = useState(null);
 
-  const getDummyLocation = useCallback(() => {
-    const dummyLocations = {
-      loc1: {
-        id: "loc1",
-        name: "ビッグ・オー",
-        // Use the Big-O roller coaster screenshot
-        screenshotUrl: "/screenshots/big-o.png",
-        specialBarcode: "TDC-BIGO-001",
-      },
-      loc2: {
-        id: "loc2",
-        name: "Half Saints BAKES",
-        // Use the Half Saints bakery screenshot
-        screenshotUrl: "/screenshots/half-saints.png",
-        specialBarcode: "TDC-HALFsaints-001",
-      },
-      loc3: {
-        id: "loc3",
-        name: "GIANTS OFFICIAL TEAM STORE",
-        // Use the Giants store screenshot
-        screenshotUrl: "/screenshots/giants-store.png",
-        specialBarcode: "TDC-GIANTS-001",
-      },
+  // ============================================
+  // FETCH LOCATION (or use dummy)
+  // ============================================
+  useEffect(() => {
+    const getDummyLocation = () => {
+      const dummyLocations = {
+        "dolphin-location": {
+          id: "dolphin-location",
+          name: "Thunder Dolphin",
+          screenshotUrl: "/screenshots/giants-store.png",
+          specialBarcode: "TDC-DOLPHIN-001",
+        },
+        "ichiran-location": {
+          id: "ichiran-location",
+          name: "Ichiran Ramen",
+          screenshotUrl: "/screenshots/giants-store.png",
+          specialBarcode: "TDC-ICHIRAN-001",
+        },
+        "stadium-location": {
+          id: "stadium-location",
+          name: "Stadium Entrance",
+          screenshotUrl: "/screenshots/giants-store.png",
+          specialBarcode: "TDC-STADIUM-001",
+        },
+      };
+
+      return dummyLocations[locationId] || dummyLocations["dolphin-location"];
     };
 
-    return dummyLocations[locationId] || dummyLocations["loc1"];
+    const fetchLocation = async () => {
+      try {
+        setLoading(true);
+        setLocationData(getDummyLocation());
+      } catch (error) {
+        console.error("Error fetching location:", error);
+        setLocationData(getDummyLocation());
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLocation();
   }, [locationId]);
 
-  const fetchLocation = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await getLocationById(locationId);
-      setLocationData(response.data);
-    } catch (error) {
-      console.error("Error fetching location:", error);
-      setLocationData(getDummyLocation());
-    } finally {
-      setLoading(false);
-    }
-  }, [locationId, getDummyLocation]);
-
+  // ============================================
+  // CLEANUP SCANNER
+  // ============================================
   useEffect(() => {
     return () => {
       if (scanner) {
@@ -68,30 +72,44 @@ function LocationDetailPage() {
     };
   }, [scanner]);
 
-  useEffect(() => {
-    fetchLocation();
-  }, [fetchLocation]);
-
+  // ============================================
+  // COMPLETE TASK - KEY FUNCTION
+  // ============================================
   const handleTaskCompletion = async () => {
+    if (!task) {
+      console.error("❌ No task data available");
+      navigate("/mission-page");
+      return;
+    }
+
     try {
-      const response = await completeTask({
-        userId: "u1",
-        missionId: missionId,
-        taskId: task.id,
-        locationId: locationId,
+      console.log("✅ Task completed:", task.id);
+
+      // Get current completed tasks from localStorage
+      const savedTasks = localStorage.getItem("completedTasks");
+      const completedTasks = savedTasks ? JSON.parse(savedTasks) : [];
+
+      // Add this task if not already completed
+      if (!completedTasks.includes(task.id)) {
+        const updatedTasks = [...completedTasks, task.id];
+        localStorage.setItem("completedTasks", JSON.stringify(updatedTasks));
+        console.log("💾 Updated completed tasks:", updatedTasks);
+
+        // Update achievements
+        updateAchievements(task.id);
+      }
+
+      // Navigate back to mission page with completion state
+      navigate("/mission-page", {
+        state: {
+          completedTaskId: task.id,
+          taskReward: task.reward,
+        },
       });
-
-      const message = response.data.bonusAwarded
-        ? `🎉 Task Complete! +${response.data.reward} FUN (including bonus!)`
-        : `✅ Task Complete! +${task.reward} FUN earned`;
-
-      alert(message);
-      navigate("/", { state: { completedTask: task.id } });
     } catch (error) {
       console.error("Error completing task:", error);
-
-      alert(`✅ Task Complete! +${task.reward} FUN earned`);
-
+      
+      // Still navigate back even if something fails
       navigate("/", {
         state: {
           completedTaskId: task.id,
@@ -101,61 +119,66 @@ function LocationDetailPage() {
     }
   };
 
-  const onScanSuccess = async (decodedText) => {
-    console.log("Scanned:", decodedText);
+  // ============================================
+  // UPDATE ACHIEVEMENTS
+  // ============================================
+  const updateAchievements = (taskId) => {
+    const taskTypes = {
+      't1': 'entertainment',
+      't2': 'food',
+      't3': 'shopping'
+    };
 
-    if (scanner) {
-      scanner.clear().catch((err) => console.log("Scanner clear error:", err));
-    }
-
-    setScanning(false);
-
-    if (decodedText === locationData.specialBarcode) {
-      await handleTaskCompletion();
-    } else {
-      alert("Invalid barcode! Please scan the correct mission barcode.");
-    }
-  };
-
-  const onScanError = (error) => {
-    console.warn("Scan error:", error);
-  };
-
-  const startScanning = () => {
-    setScanning(true);
-
-    const html5QrcodeScanner = new Html5QrcodeScanner(
-      "qr-reader",
-      { fps: 10, qrbox: 250 },
-      false
+    const achievements = JSON.parse(
+      localStorage.getItem("achievements") || 
+      '{"food": 0, "entertainment": 0, "shopping": 0}'
     );
+    
+    const type = taskTypes[taskId];
+    console.log("🏆 Updating achievement:", type);
+    
+    if (type === "food") achievements.food += 1;
+    if (type === "entertainment") achievements.entertainment += 1;
+    if (type === "shopping") achievements.shopping += 1;
 
-    html5QrcodeScanner.render(onScanSuccess, onScanError);
-    setScanner(html5QrcodeScanner);
+    localStorage.setItem("achievements", JSON.stringify(achievements));
+    console.log("💾 Saved achievements:", achievements);
   };
 
-  const stopScanning = () => {
-    if (scanner) {
-      scanner.clear().catch((err) => console.log("Scanner stop error:", err));
+  // ============================================
+  // CHECK-IN HANDLER
+  // ============================================
+  const handleCheckIn = async () => {
+    console.log("📍 Check-in button clicked for task:", task?.id);
+    
+    // Show a quick feedback animation
+    const button = document.querySelector('.checkin-button-overlay');
+    if (button) {
+      button.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        button.style.transform = 'scale(1)';
+      }, 150);
     }
-    setScanning(false);
-  };
 
-  const handleDemoScan = async () => {
-    console.log("Demo scan - auto completing task");
+    // Complete the task and navigate back
     await handleTaskCompletion();
   };
 
+  // ============================================
+  // RENDER
+  // ============================================
   if (loading) {
     return <div className="loading">Loading location...</div>;
   }
 
   return (
     <div className="location-page-screenshot">
-      {/* Back button overlay */}
-      <button className="back-btn-overlay" onClick={() => navigate(-1)}>
-        <ArrowLeft size={28} color="white" />
-      </button>
+      {/* Back button overlay - transparent clickable area on grey back arrow */}
+      <button 
+        className="back-btn-overlay" 
+        onClick={() => navigate("/mission-page")} 
+        aria-label="Go back"
+      />
 
       {/* Screenshot of existing TDC location page */}
       <div className="screenshot-container">
@@ -163,48 +186,15 @@ function LocationDetailPage() {
           src={locationData.screenshotUrl}
           alt={locationData.name}
           className="location-screenshot"
-          style={{
-            maxWidth: "100%",
-            height: "auto",
-            maxHeight: "60vh",
-            objectFit: "contain",
-          }}
         />
       </div>
 
-      {/* Your NEW section with demo buttons - overlaid at bottom */}
+      {/* Check-in button overlaid on screenshot - below Map button */}
       {task && (
-        <div className="demo-overlay-section">
-          <div className="demo-section-header">
-            <h3>🎯 MISSION CHECK-IN</h3>
-            <p>Complete task to earn +{task.reward} FUN points</p>
-          </div>
-
-          {!scanning ? (
-            <div className="demo-buttons">
-              {/* DEMO MODE BUTTON */}
-              <button className="demo-complete-btn" onClick={handleDemoScan}>
-                ✅ COMPLETE TASK (DEMO)
-              </button>
-
-              {/* REAL SCAN BUTTON */}
-              <button className="demo-scan-btn" onClick={startScanning}>
-                📱 SCAN BARCODE (REAL)
-              </button>
-
-              <p className="demo-helper-text">
-                💡 Use demo button for presentation or scan real barcode
-              </p>
-            </div>
-          ) : (
-            <div className="scanner-wrapper">
-              <div id="qr-reader" style={{ width: "100%" }}></div>
-              <button className="cancel-scan-btn" onClick={stopScanning}>
-                Cancel Scanning
-              </button>
-            </div>
-          )}
-        </div>
+        <button className="checkin-button-overlay" onClick={handleCheckIn}>
+          <span className="checkin-icon">📍</span>
+          <span className="checkin-text">チェックイン</span>
+        </button>
       )}
     </div>
   );

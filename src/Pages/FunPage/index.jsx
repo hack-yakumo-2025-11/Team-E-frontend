@@ -18,7 +18,7 @@ function FunPage() {
         />
         <button 
           className={styles.fun_page_missions_button}
-          onClick={() => navigate('/missions/')}
+          onClick={() => navigate('/mission-page/')}
         >
           <Goal color='red'/>
         </button>
