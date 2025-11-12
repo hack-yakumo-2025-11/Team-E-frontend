@@ -1,29 +1,36 @@
-import './OriginalAppPage.css';
+import styles from './styles.module.css';
 import FreshStart from '../../assets/images/FreshStart.png';
 import OpenScan from '../../assets/images/OpenScan.png';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function OriginalAppPage() {
+function InitialPage() {
   const [backImage, setBackImage] = useState(false);
+  const navigate = useNavigate();
 
   return (
-    <div className="main-screen">
+    <div className={styles.initial_page}>
         <img 
           src={backImage ? OpenScan : FreshStart} 
-          className='main-screen-img'
+          className={styles.initial_page_img}
         />
         <button 
-          className='main-screen-open-scan-button' 
+          className={styles.initial_page_open_scan_button} 
           onClick={() => setBackImage((val) => 1 - val)}
           style={{zIndex: !backImage * 3}}
         />
         <button 
-          className='main-screen-click-scan-button' 
+          className={styles.initial_page_fun_button}
+          onClick={() => navigate('/fun')}
+          style={{zIndex: !backImage * 3}}
+        />
+        <button 
+          className={styles.initial_page_click_scan_button}
           onClick={() => console.log('-')}
           style={{zIndex: backImage * 3}}
         />
         <button 
-          className='main-screen-close-scan-button' 
+          className={styles.initial_page_close_scan_button}
           onClick={() => setBackImage((val) => 1 - val)}
           style={{zIndex: backImage * 3}}
         />
@@ -31,4 +38,4 @@ function OriginalAppPage() {
   );
 }
 
-export default OriginalAppPage;
+export default InitialPage;
