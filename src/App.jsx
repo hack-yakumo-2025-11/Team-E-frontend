@@ -4,7 +4,7 @@ import InitialPage from './Pages/InitialPage';
 import MissionPage from './Pages/MissionPage/MissionPage';
 import LocationDetailPage from './Pages/LocationDetailPage/LocationDetailPage';
 import FunPage from './Pages/FunPage';
-// import AchievementsPage from './pages/AchievementsPage';
+import AchievementsPage from './Pages/AchievementPage';
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <Route path="/missions" element={<MissionPage />} />
           {/* <Route path="/mission/:missionId" element={<MissionPage />} /> */}
           <Route path="/location/:locationId" element={<LocationDetailPage />} />
-          {/* //<Route path="/achievements" element={<AchievementsPage />} /> */}
+          <Route path="/achievements" element={<AchievementsPage />} />
         </Routes>
       </div>
     </Router>
