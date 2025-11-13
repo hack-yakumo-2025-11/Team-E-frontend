@@ -1,86 +1,36 @@
 import styles from './styles.module.css';
 import BottomBar from '../../components/BottomBar';
 import { useEffect, useState } from 'react';
-import { getAchievements } from '../../services/api';
+import { getAchievements, getUserData } from '../../services/api';
 import { Circle, CircleCheckBig } from 'lucide-react';
-import AdventurerBadge from '../../assets/images/AdventurerBadge.png';
-import CollectorBadge from '../../assets/images/CollectorBadge.png';
-import FoodieBadge from '../../assets/images/FoodieBadge.png';
-
-const dummyAchievements = [
-    {
-        name: 'Foodie',
-        image: FoodieBadge,
-        description: 'A journey to find the perfect food spot',
-        list: [
-            'Yugyo-an Tankuma Kita-mise',
-            'TORIMIKURA YATAI'
-        ],
-        fullList: [
-            'Yugyo-an Tankuma Kita-mise',
-            'Seafood Buffet Iroha',
-            'Flowers, Food and Cream Soda Nagisa Restaurant',
-            'TORIMIKURA YATAI'
-        ]
-    },
-    {
-        name: 'Collector',
-        image: CollectorBadge,
-        description: 'It is OK to want everything they sell',
-        list: [
-            'GIANTS STORE BALLPARK TOKYO',
-        ],
-        fullList: [
-            'GIANTS STORE BALLPARK TOKYO',
-            'JUMP SHOP',
-            'GLOBAL WORK',
-            'UNIQLO',
-            'ABC-MART'
-        ]
-    },
-    {
-        name: 'Adventurer',
-        image: AdventurerBadge,
-        description: 'What else can you try here?',
-        list: [
-            'Hero Action Show',
-            'Indoor Kids` Playground ASOBono!',
-            'Space Travelium TeNQ',
-            'Gallery AaMo',
-            'Table Tennis Space TaKuSuRu'
-        ],
-        fullList: [
-            'Hero Action Show',
-            'Indoor Kids` Playground ASOBono!',
-            'Space Travelium TeNQ',
-            'Tokyo Dome Roller Skate Arena',
-            'Gallery AaMo',
-            'Table Tennis Space TaKuSuRu'
-        ]
-    }
-]
+import { useNavigate } from 'react-router-dom';
 
 function AchievementsPage() {
     const [loading, setLoading] = useState(true);
     const [shownList, setShownList] = useState(4);
-    const [achievements, setAchievements] = useState(dummyAchievements);
+    const [userData, setUserData] = useState(null);
+    const [achievements, setAchievements] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchMission = async () => {
+        const fetchData = async () => {
           try {
             setLoading(true);
-            const response = await getAchievements(0);
-            setAchievements(response.data);
+
+            const userDataResponse = await getUserData();
+            setUserData(userDataResponse.data);
+
+            const achievementsResponse = await getAchievements();
+            setAchievements(achievementsResponse.data);
           } catch (error) {
             console.error("Error fetching mission:", error);
-            console.log("Using dummy data with completed tasks:", dummyAchievements);
-            setAchievements(dummyAchievements);
           } finally {
             setLoading(false);
           }
         };
     
-        fetchMission();
+        fetchData();
     }, []);
 
     if (loading) {
@@ -109,9 +59,10 @@ function AchievementsPage() {
             <div className={styles.achievements_page_container}>
                 {
                     achievements.map((ach, index) => {
+                        const list = userData.achievements[ach.name];
                         return (
                             <div 
-                                id={ach.name} 
+                                key={ach.name}
                                 className={styles.achievements_page_segment}
                                 style={{maxHeight: shownList === index ? `${15 + 4 * ach.fullList.length}vh` : '15 vh'}}
                             >
@@ -127,8 +78,8 @@ function AchievementsPage() {
                                 </div>
                                 <div className={styles.achievements_page_segment_progress_block}>
                                     <div className={styles.achievements_page_segment_progress_block_bar}>
-                                        <div style={{width: `${ach.list.length / ach.fullList.length * 100}%`}}>
-                                            {ach.list.length}/{ach.fullList.length}
+                                        <div style={{width: `${list.length / ach.fullList.length * 100}%`}}>
+                                            {list.length}/{ach.fullList.length}
                                         </div>
                                     </div>
                                     <button onClick={() => setShownList((val) => {
@@ -148,12 +99,14 @@ function AchievementsPage() {
                                                 return (
                                                     <span>
                                                         {
-                                                            ach.list.includes(place) ?
+                                                            list.includes(place.name) ?
                                                                 <CircleCheckBig color='green'/> :
                                                                 <Circle/>
                                                         }
                                                         
-                                                        {place}
+                                                        <span onClick={() => navigate(`/location/${place.id}`)}>
+                                                            {place.name}
+                                                        </span>
                                                     </span>
                                                 )
                                             }) :
