@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
 
-// Hardcoded user ID (since you have user "1" in your backend)
+const API_BASE_URL = 'http://localhost:5000/api';
 const USER_ID = "1";
 
 const api = axios.create({
@@ -36,7 +35,7 @@ api.interceptors.response.use(
   }
 );
 
-// Get all missions for the user
+// Get all missions for selection
 export const getMissions = () => {
   return api.get(`/missions/${USER_ID}`);
 };
@@ -44,6 +43,14 @@ export const getMissions = () => {
 // Get specific mission by ID
 export const getMissionById = (missionId) => {
   return api.get(`/missions/detail/${missionId}`);
+};
+
+// Select a mission
+export const selectMission = (missionId) => {
+  return api.post('/missions/select', {
+    userId: USER_ID,
+    missionId
+  });
 };
 
 // Get location details by ID
@@ -60,11 +67,19 @@ export const completeTask = (missionId, taskId) => {
   });
 };
 
-// Reset mission (new check-in)
-export const resetMission = (missionId) => {
-  return api.post('/missions/reset', {
+// Swap mission (if not locked)
+export const swapMission = (currentMissionId, newMissionId) => {
+  return api.post('/missions/swap', {
     userId: USER_ID,
-    missionId
+    currentMissionId,
+    newMissionId
+  });
+};
+
+// Reset all missions (new check-in)
+export const resetMission = () => {
+  return api.post('/missions/reset', {
+    userId: USER_ID
   });
 };
 
@@ -73,7 +88,8 @@ export const getAchievements = () => {
   return api.get(`/achievements/${USER_ID}`);
 };
 
-// Export USER_ID for use in components if needed
+
+
 export const getCurrentUserId = () => USER_ID;
 
 export default api;

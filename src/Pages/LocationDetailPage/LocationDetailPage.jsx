@@ -48,6 +48,9 @@ function LocationDetailPage() {
   const handleTaskCompletion = async () => {
     if (!task || !missionId) {
       console.error("❌ No task or mission data available");
+      console.log("Task:", task);
+      console.log("Mission ID:", missionId);
+      alert("タスク情報が見つかりません。ミッションページに戻ります。");
       navigate("/mission-page");
       return;
     }
@@ -59,7 +62,9 @@ function LocationDetailPage() {
 
     try {
       setCompleting(true);
-      console.log("📡 Completing task via backend:", task.id);
+      console.log("📡 Completing task via backend...");
+      console.log("Mission ID:", missionId);
+      console.log("Task ID:", task.id);
 
       // Call backend API to complete task
       const response = await completeTask(missionId, task.id);
@@ -67,22 +72,30 @@ function LocationDetailPage() {
       console.log("✅ Task completed successfully:", response.data);
       console.log("🎁 Reward earned:", response.data.reward);
       console.log("💰 New total points:", response.data.newTotalPoints);
+      console.log("🔒 Mission locked:", response.data.missionLocked);
 
       // Navigate back to mission page with completion state
       navigate("/mission-page", {
         state: {
+          selectedMissionId: missionId,
           completedTaskId: task.id,
           taskReward: response.data.reward,
           newTotalPoints: response.data.newTotalPoints,
-          missionCompleted: response.data.missionCompleted
+          missionCompleted: response.data.missionCompleted,
+          missionLocked: response.data.missionLocked
         },
       });
     } catch (err) {
       console.error("❌ Error completing task:", err);
+      console.error("Error response:", err.response?.data);
       
       // Show error but still navigate back
       alert("タスクの完了中にエラーが発生しました");
-      navigate("/mission-page");
+      navigate("/mission-page", {
+        state: {
+          selectedMissionId: missionId
+        }
+      });
     } finally {
       setCompleting(false);
     }
@@ -92,7 +105,9 @@ function LocationDetailPage() {
   // CHECK-IN HANDLER
   // ============================================
   const handleCheckIn = async () => {
-    console.log("📍 Check-in button clicked for task:", task?.id);
+    console.log("📍 Check-in button clicked");
+    console.log("Task:", task);
+    console.log("Mission ID:", missionId);
     
     // Show a quick feedback animation
     const button = document.querySelector('.checkin-button-overlay');
@@ -127,12 +142,24 @@ function LocationDetailPage() {
     );
   }
 
+  // Check if we have task and mission data
+  if (!task || !missionId) {
+    console.warn("⚠️ Missing task or mission data in location state");
+  }
+
   return (
     <div className="location-page-screenshot">
       {/* Back button overlay - transparent clickable area on grey back arrow */}
       <button 
         className="back-btn-overlay" 
-        onClick={() => navigate("/mission-page")} 
+        onClick={() => {
+          console.log("⬅️ Back button clicked, navigating to mission page");
+          navigate("/mission-page", {
+            state: {
+              selectedMissionId: missionId
+            }
+          });
+        }} 
         aria-label="Go back"
       />
 
@@ -146,7 +173,7 @@ function LocationDetailPage() {
       </div>
 
       {/* Check-in button overlaid on screenshot - below Map button */}
-      {task && (
+      {task && missionId ? (
         <button 
           className="checkin-button-overlay" 
           onClick={handleCheckIn}
@@ -158,6 +185,10 @@ function LocationDetailPage() {
             {completing ? "処理中..." : "チェックイン"}
           </span>
         </button>
+      ) : (
+        <div className="error-banner">
+          タスク情報が見つかりません
+        </div>
       )}
     </div>
   );
