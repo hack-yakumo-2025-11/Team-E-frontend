@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './CountdownTimer.css';
+import styles from './styles.module.css';
 
 function CountdownTimer({ expiryTime }) {
   const [timeLeft, setTimeLeft] = useState('');
@@ -33,11 +33,11 @@ function CountdownTimer({ expiryTime }) {
   }, [expiryTime]);
 
   return (
-    <div className="countdown-timer">
-      <div className="timer-icon">⏰</div>
-      <div className="timer-text">
-        <div className="timer-label">残り時間</div>
-        <div className="timer-value">{timeLeft}</div>
+    <div className={styles.countdown_timer}>
+      <div className={styles.timer_icon}>⏰</div>
+      <div className={styles.timer_text}>
+        <div className={styles.timer_label}>残り時間</div>
+        <div className={styles.timer_value}>{timeLeft}</div>
       </div>
     </div>
   );
