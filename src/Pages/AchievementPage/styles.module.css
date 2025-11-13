@@ -10,15 +10,17 @@
 }
 
 .achievements_page_title {
-    padding: 5vh 0;
+    padding: 4vh 0;
     background-color: gold;
     width: 100%;
     font-size: 24px;
     font-weight: 700;
     text-align: center;
     gap: 12px;
-    margin: 0;
+    margin: 0 0 1vh 0;
+    border-bottom: 2px solid orange;
 }
+
 
 .achievements_page_container {
     width: 100%;
@@ -34,11 +36,29 @@
     border: 1px solid black;
     box-shadow: 5px 10px 5px gray;
     border-radius: 10px;
-    overflow-y: hidden;
     display: flex;
     flex-direction: column;
     margin: 3vh 0;
     padding-bottom: 5px;
+    position: relative;
+}
+
+.achievements_page_segment_title_reward {
+    position: absolute;
+    border-radius: 50%;
+    width: 6vh;
+    height: 6vh;
+    right: -3vh;
+    top: -3vh;
+    z-index: 3;
+    background: linear-gradient(45deg, #f7b2d8 0%, #f14f4d 100%);
+    border: 3px double darkblue;
+    font-size: 28px;
+    font-weight: 700;
+    color: rgb(#f4df69);
+    text-shadow: 2px -1px black;
+    text-align: center;
+    line-height: 50px;
 }
 
 .achievements_page_segment_title {
@@ -49,11 +69,13 @@
     padding: 1vw 3vw;
     display: flex;
     flex-direction: column;
+    text-shadow: 1px 1px gold;
 }
 
 .achievements_page_segment_title img {
     width: 10vh;
     height: 10vh;
+    border-radius: 10px;
 }
 
 .achievements_page_segment_progress_block {
@@ -62,8 +84,21 @@
     align-items: center;
 }
 
+.achievements_page_segment_progress_block_bar {
+    margin: 5px 0;
+    width: 40vw;
+    background-color: lightblue;
+    border-radius: 5px;
+    border: 2px solid darkgray;
+}
+
+.achievements_page_segment_progress_block_bar div {
+    text-align: center;
+    background-color: mediumaquamarine;
+}
+
 .achievements_page_segment_progress_block button {
-    padding: 2px 5px;
+    padding: 2px 8px;
 }
 
 .achievements_page_segment_list {

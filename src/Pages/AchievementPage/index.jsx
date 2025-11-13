@@ -115,6 +115,9 @@ function AchievementsPage() {
                                 className={styles.achievements_page_segment}
                                 style={{maxHeight: shownList === index ? `${15 + 4 * ach.fullList.length}vh` : '15 vh'}}
                             >
+                                <div className={styles.achievements_page_segment_title_reward}>
+                                    {ach.fullList.length}
+                                </div>
                                 <div className={styles.achievements_page_segment_title}>
                                     <img src={ach.image} />
                                     <div>
@@ -123,9 +126,11 @@ function AchievementsPage() {
                                     </div>
                                 </div>
                                 <div className={styles.achievements_page_segment_progress_block}>
-                                    <span>
-                                        Progress {ach.list.length}/{ach.fullList.length}
-                                    </span>
+                                    <div className={styles.achievements_page_segment_progress_block_bar}>
+                                        <div style={{width: `${ach.list.length / ach.fullList.length * 100}%`}}>
+                                            {ach.list.length}/{ach.fullList.length}
+                                        </div>
+                                    </div>
                                     <button onClick={() => setShownList((val) => {
                                         if (val === index) {
                                             return 4
@@ -144,8 +149,8 @@ function AchievementsPage() {
                                                     <span>
                                                         {
                                                             ach.list.includes(place) ?
-                                                                <CircleCheckBig /> :
-                                                                <Circle />
+                                                                <CircleCheckBig color='green'/> :
+                                                                <Circle/>
                                                         }
                                                         
                                                         {place}
