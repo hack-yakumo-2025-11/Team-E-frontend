@@ -3,9 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import CountdownTimer from '../../components/countdownTimer/countdownTimer';
 import TaskCard from '../../components/TaskCard/TaskCard';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
-import './MissionPage.css';
 import BottomBar from '../../components/BottomBar';
 import { getMissions } from '../../services/api';
+
+import styles from './styles.module.css';
 
 function MissionPage() {
   const navigate = useNavigate();
@@ -116,16 +117,16 @@ function MissionPage() {
   // ============================================
   if (loading) {
     return (
-      <div className="mission-page">
-        <div className="loading">ミッションを読み込み中...</div>
+      <div className={styles.mission_page}>
+        <div className={styles.loading}>ミッションを読み込み中...</div>
       </div>
     );
   }
 
   if (error || !mission) {
     return (
-      <div className="mission-page">
-        <div className="error">{error || "ミッションが見つかりません"}</div>
+      <div className={styles.mission_page}>
+        <div className={styles.error}>{error || "ミッションが見つかりません"}</div>
       </div>
     );
   }
@@ -134,57 +135,57 @@ function MissionPage() {
   const allTasksComplete = completedCount === mission.tasks.length;
 
   return (
-    <div className="mission-page">
-      <div className="mission-header">
-        <h1 className="mission-title">
-          <span className="mission-icon">🎯</span>
+    <div className={styles.mission_page}>
+      <div className={styles.mission_header}>
+        <h1 className={styles.mission_title}>
+          <span className={styles.mission_icon}>🎯</span>
           {mission.title}
         </h1>
       </div>
 
-      <div className="mission-content">
+      <div className={styles.mission_content}>
         <CountdownTimer expiryTime={mission.expiryTime} />
 
         {allTasksComplete && (
-          <div className="mission-complete-banner">
+          <div className={styles.mission_complete_banner}>
             <h2>🎉 ミッション完了！</h2>
             <p>
               {mission.totalReward} FUNポイントを獲得しました！
             </p>
             <button 
-              className="fun-page-button" 
+              className={styles.fun_page_button} 
               onClick={handleGoToFunPage}
               aria-label="Go to FUN page"
             >
-              <span className="fun-icon">🎮</span>
-              <span className="fun-text">FUNを見る</span>
+              <span className={styles.fun_icon}>🎮</span>
+              <span className={styles.fun_text}>FUNを見る</span>
             </button>
           </div>
         )}
 
-        <div className="mission-info-card">
-          <p className="mission-description">{mission.description}</p>
-          <div className="mission-rewards">
-            <div className="mission-reward">
-              <span className="reward-icon">🎁</span>
-              <span className="reward-text">
+        <div className={styles.mission_info_card}>
+          <p className={styles.mission_description}>{mission.description}</p>
+          <div className={styles.mission_rewards}>
+            <div className={styles.mission_rewawrd}>
+              <span className={styles.reward_icon}>🎁</span>
+              <span className={styles.reward_text}>
                 合計報酬: {mission.totalReward} FUN
               </span>
             </div>
           </div>
         </div>
 
-        <div className="tips-card">
-          <h3 className="tips-title">💡 ヒント</h3>
-          <ul className="tips-list">
+        <div className={styles.tips_card}>
+          <h3 className={styles.tips_title}>💡 ヒント</h3>
+          <ul className={styles.tips_list}>
             <li>✅ タスクは順不同で完了できます</li>
             <li>📍 すべての場所は徒歩10分圏内です</li>
             <li>🏆 アチーブメントバッジを集めよう！</li>
           </ul>
         </div>
 
-        <div className="task-list">
-          <h2 className="section-title">
+        <div className={styles.task_list}>
+          <h2 className={styles.section_title}>
             あなたのタスク ({completedCount}/{mission.tasks.length})
           </h2>
           {mission.tasks.map((task, index) => (

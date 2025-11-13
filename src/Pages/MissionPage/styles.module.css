@@ -1,18 +1,18 @@
 /* Mission Header with Reset Button */
-.mission-header {
+.mission_header {
   background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
   color: white;
   padding: 24px 20px;
   box-shadow: 0 2px 10px rgba(0, 71, 171, 0.15);
   display: flex;
-  justify-content: space-between;
+  justify-content: space_between;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
-.mission-title {
+.mission_title {
   font-size: 24px;
   font-weight: 700;
   display: flex;
@@ -22,12 +22,12 @@
   flex: 1;
 }
 
-.mission-icon {
+.mission_icon {
   font-size: 28px;
 }
 
 /* Mission Complete Banner */
-.mission-complete-banner {
+.mission_complete_banner {
   background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
   padding: 24px;
@@ -49,23 +49,23 @@
   }
 }
 
-.mission-complete-banner h2 {
+.mission_complete_banner h2 {
   font-size: 24px;
   margin-bottom: 8px;
 }
 
-.mission-complete-banner p {
+.mission_complete_banner p {
   font-size: 16px;
   margin: 0;
   opacity: 0.9;
 }
 
-.mission-content {
+.mission_content {
   padding: 20px;
   padding-bottom: 100px;
 }
 
-.mission-info-card {
+.mission_info_card {
   background: white;
   border-radius: 12px;
   padding: 16px;
@@ -74,20 +74,20 @@
   border: 1px solid #E6F2FF;
 }
 
-.mission-description {
+.mission_description {
   font-size: 15px;
   color: #666;
   line-height: 1.5;
   margin-bottom: 12px;
 }
 
-.mission-rewards {
+.mission_rewards {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.mission-reward {
+.mission_reward {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -97,17 +97,17 @@
   border: 2px solid #FFD54F;
 }
 
-.reward-icon {
+.reward_icon {
   font-size: 20px;
 }
 
-.reward-text {
+.reward_text {
   font-size: 15px;
   font-weight: 700;
   color: #F57C00;
 }
 
-.bonus-info {
+.bonus_info {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -117,17 +117,17 @@
   border: 2px solid #FFB800;
 }
 
-.bonus-icon {
+.bonus_icon {
   font-size: 20px;
 }
 
-.bonus-text {
+.bonus_text {
   font-size: 14px;
   font-weight: 600;
   color: #FF9800;
 }
 
-.tips-card {
+.tips_card {
   background: #E6F2FF;
   border-radius: 12px;
   padding: 16px;
@@ -135,38 +135,38 @@
   border-left: 4px solid #0047AB;
 }
 
-.tips-title {
+.tips_title {
   font-size: 16px;
   font-weight: 700;
   color: #333;
   margin-bottom: 12px;
 }
 
-.tips-list {
+.tips_list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.tips-list li {
+.tips_list li {
   font-size: 14px;
   color: #666;
   padding: 6px 0;
   line-height: 1.4;
 }
 
-.section-title {
+.section_title {
   font-size: 18px;
   font-weight: 700;
   color: #333;
   margin-bottom: 16px;
 }
 
-.task-list {
+.task_list {
   margin-bottom: 20px;
 }
 
-.mission-page {
+.mission_page {
   min-height: 100vh;
   width: 100vw;
   position: relative;
@@ -187,31 +187,31 @@
 }
 
 /* Mission Complete Banner with FUN Button */
-.mission-complete-banner {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.mission_complete_banner {
+  background: linear_gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 2rem;
   border-radius: 16px;
   text-align: center;
   margin-bottom: 1.5rem;
   box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
-  animation: slideIn 0.5s ease-out;
+  animation: slideIn 0.5s ease_out;
 }
 
-.mission-complete-banner h2 {
+.mission_complete_banner h2 {
   margin: 0 0 0.5rem 0;
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-.mission-complete-banner p {
+.mission_complete_banner p {
   margin: 0 0 1rem 0;
   font-size: 1.1rem;
   opacity: 0.95;
 }
 
 /* FUN Page Button */
-.fun-page-button {
+.fun_page_button {
   background: white;
   color: #667eea;
   border: none;
@@ -220,7 +220,7 @@
   font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
-  display: inline-flex;
+  display: inline_flex;
   align-items: center;
   gap: 0.5rem;
   transition: all 0.3s ease;
@@ -228,28 +228,28 @@
   margin-top: 0.5rem;
 }
 
-.fun-page-button:hover {
-  transform: translateY(-2px);
+.fun_page_button:hover {
+  transform: translateY(_2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-.fun-page-button:active {
+.fun_page_button:active {
   transform: translateY(0);
 }
 
-.fun-icon {
+.fun_icon {
   font-size: 1.4rem;
   animation: bounce 1s infinite;
 }
 
-.fun-text {
+.fun_text {
   font-size: 1rem;
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(_20px);
   }
   to {
     opacity: 1;
@@ -262,6 +262,6 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-5px);
+    transform: translateY(_5px);
   }
 }
