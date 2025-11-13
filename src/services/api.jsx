@@ -83,9 +83,14 @@ export const resetMission = () => {
   });
 };
 
-// Get user achievements
+// Get user data
+export const getUserData = () => {
+  return api.get(`/${USER_ID}`);
+};
+
+// Get common achievements
 export const getAchievements = () => {
-  return api.get(`/achievements/${USER_ID}`);
+  return api.get(`/achievements`);
 };
 
 

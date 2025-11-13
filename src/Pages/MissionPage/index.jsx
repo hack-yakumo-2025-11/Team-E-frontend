@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TaskCard from '../../components/TaskCard/TaskCard';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
-import './MissionPage.css';
 import BottomBar from '../../components/BottomBar';
 import MissionSelector from '../../components/MissionSelector/MissionSelector';
 import { getMissionById, swapMission } from '../../services/api';
+
+import styles from './styles.module.css';
 
 function MissionPage() {
   const navigate = useNavigate();
@@ -152,8 +153,8 @@ function MissionPage() {
   // ===============================
   if (loading) {
     return (
-      <div className="mission-page">
-        <div className="loading">ミッションを読み込み中...</div>
+      <div className={styles.mission_page}>
+        <div className={styles.loading}>ミッションを読み込み中...</div>
       </div>
     );
   }
@@ -226,15 +227,15 @@ function MissionPage() {
         )}
 
         {allTasksComplete && (
-          <div className="mission-complete-banner">
+          <div className={styles.mission_complete_banner}>
             <h2>🎉 ミッション完了！</h2>
             <p>{mission.totalReward} FUNポイントを獲得しました！</p>
             <button
               className="fun-page-button"
               onClick={handleGoToFunPage}
             >
-              <span className="fun-icon">🎮</span>
-              <span className="fun-text">FUNを見る</span>
+              <span className={styles.fun_icon}>🎮</span>
+              <span className={styles.fun_text}>FUNを見る</span>
             </button>
           </div>
         )}
@@ -249,17 +250,17 @@ function MissionPage() {
           </div>
         </div>
 
-        <div className="tips-card">
-          <h3 className="tips-title">💡 ヒント</h3>
-          <ul className="tips-list">
+        <div className={styles.tips_card}>
+          <h3 className={styles.tips_title}>💡 ヒント</h3>
+          <ul className={styles.tips_list}>
             <li>✅ タスクは順不同で完了できます</li>
             <li>📍 すべての場所は徒歩圏内です</li>
             <li>🔒 最初のタスク完了後はミッション変更不可</li>
           </ul>
         </div>
 
-        <div className="task-list">
-          <h2 className="section-title">
+        <div className={styles.task_list}>
+          <h2 className={styles.section_title}>
             あなたのタスク ({completedCount}/{mission.tasks.length})
           </h2>
           {mission.tasks.map((task, index) => (

@@ -1,4 +1,4 @@
-.progress-bar-container {
+.progress_bar_container {
   background: white;
   padding: 24px 20px;
   border-radius: 16px;
@@ -7,27 +7,27 @@
   border: 1px solid #E6F2FF;
 }
 
-.progress-bar-header {
+.progress_bar_header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
 }
 
-.progress-label {
+.progress_label {
   font-size: 16px;
   font-weight: 700;
   color: #333;
 }
 
-.progress-percentage {
+.progress_percentage {
   font-size: 24px;
   font-weight: 700;
   color: #0047AB;
 }
 
 /* Progress Steps Container */
-.progress-steps {
+.progress_steps {
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -37,7 +37,7 @@
 }
 
 /* Progress Line (Background) */
-.progress-line {
+.progress_line {
   position: absolute;
   top: 50%;
   left: 20px;
@@ -50,7 +50,7 @@
 }
 
 /* Progress Line Fill (Active/Completed portion) */
-.progress-line-fill {
+.progress_line_fill {
   height: 100%;
   background: linear-gradient(90deg, #0047AB 0%, #1E90FF 100%);
   border-radius: 2px;
@@ -58,7 +58,7 @@
 }
 
 /* Step Wrapper for positioning */
-.progress-step-wrapper {
+.progress_step_wrapper {
   position: relative;
   z-index: 2;
   flex: 1;
@@ -66,16 +66,16 @@
   justify-content: center;
 }
 
-.progress-step-wrapper:first-child {
+.progress_step_wrapper:first-child {
   justify-content: flex-start;
 }
 
-.progress-step-wrapper:last-child {
+.progress_step_wrapper:last-child {
   justify-content: flex-end;
 }
 
 /* Individual Step Circle */
-.progress-step {
+.progress_step {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -92,7 +92,7 @@
 }
 
 /* Completed Step */
-.progress-step.completed {
+.progress_step.completed {
   background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
   border-color: #0047AB;
   color: white;
@@ -100,7 +100,7 @@
 }
 
 /* Add checkmark for completed steps except 0 */
-.progress-step.completed:not(:first-child)::after {
+.progress_step.completed:not(:first-child)::after {
   content: '✓';
   position: absolute;
   font-size: 18px;
@@ -108,25 +108,25 @@
 }
 
 /* Hide number when showing checkmark */
-.progress-step.completed:not(:first-child) {
+.progress_step.completed:not(:first-child) {
   font-size: 0;
 }
 
 /* Keep showing number 0 */
-.progress-step:first-child {
+.progress_step:first-child {
   background: #E6F2FF;
   border-color: #0047AB;
   color: #0047AB;
 }
 
 /* Progress Info */
-.progress-info {
+.progress_info {
   text-align: center;
   padding-top: 16px;
   border-top: 1px solid #E6F2FF;
 }
 
-.tasks-completed {
+.tasks_completed {
   font-size: 14px;
   color: #666;
   font-weight: 600;
@@ -145,23 +145,23 @@
   }
 }
 
-.progress-step.completed {
+.progress_step.completed {
   animation: stepComplete 0.4s ease;
 }
 
 /* Responsive adjustments */
 @media (max-width: 400px) {
-  .progress-step {
+  .progress_step {
     width: 36px;
     height: 36px;
     font-size: 14px;
   }
   
-  .progress-steps {
+  .progress_steps {
     padding: 0 10px;
   }
   
-  .progress-line {
+  .progress_line {
     left: 10px;
     right: 10px;
   }

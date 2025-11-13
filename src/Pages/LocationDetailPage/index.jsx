@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import "./LocationPage.css";
 import { getLocationById, completeTask } from "../../services/api";
+import styles from './styles.module.css';
 
 function LocationDetailPage() {
   const { locationId } = useParams();
@@ -110,7 +110,7 @@ function LocationDetailPage() {
     console.log("Mission ID:", missionId);
     
     // Show a quick feedback animation
-    const button = document.querySelector('.checkin-button-overlay');
+    const button = document.querySelector('.checkin_button_overlay');
     if (button) {
       button.style.transform = 'scale(0.95)';
       setTimeout(() => {
@@ -126,15 +126,15 @@ function LocationDetailPage() {
   // RENDER
   // ============================================
   if (loading) {
-    return <div className="loading">場所を読み込み中...</div>;
+    return <div className={styles.loading}>場所を読み込み中...</div>;
   }
 
   if (error || !locationData) {
     return (
-      <div className="location-page-screenshot">
-        <div className="loading">{error || "場所が見つかりません"}</div>
+      <div className={styles.location_page_screenshot}>
+        <div className={styles.loading}>{error || "場所が見つかりません"}</div>
         <button 
-          className="back-btn-overlay" 
+          className={styles.back_btn_overlay} 
           onClick={() => navigate("/mission-page")} 
           aria-label="Go back"
         />
@@ -148,10 +148,10 @@ function LocationDetailPage() {
   }
 
   return (
-    <div className="location-page-screenshot">
+    <div className={styles.location_page_screenshot}>
       {/* Back button overlay - transparent clickable area on grey back arrow */}
       <button 
-        className="back-btn-overlay" 
+        className={styles.back_button_overlay} 
         onClick={() => {
           console.log("⬅️ Back button clicked, navigating to mission page");
           navigate("/mission-page", {
@@ -164,24 +164,24 @@ function LocationDetailPage() {
       />
 
       {/* Screenshot of existing TDC location page */}
-      <div className="screenshot-container">
+      <div className={styles.screenshot_container}>
         <img
           src={locationData.imageUrl}
           alt={locationData.name}
-          className="location-screenshot"
+          className={styles.location_screenshot}
         />
       </div>
 
       {/* Check-in button overlaid on screenshot - below Map button */}
       {task && missionId ? (
         <button 
-          className="checkin-button-overlay" 
+          className={styles.checkin_button_overlay} 
           onClick={handleCheckIn}
           disabled={completing}
           style={{ opacity: completing ? 0.6 : 1 }}
         >
-          <span className="checkin-icon">📍</span>
-          <span className="checkin-text">
+          <span className={styles.checkin_icon}>📍</span>
+          <span className={styles.checkin_text}>
             {completing ? "処理中..." : "チェックイン"}
           </span>
         </button>

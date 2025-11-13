@@ -1,4 +1,4 @@
-.location-page-screenshot {
+.location_page_screenshot {
   height: 100vh;
   min-height: 100vh;
   background-color: #F5F7FA;
@@ -7,22 +7,22 @@
 }
 
 /* Screenshot container should fill the parent */
-.screenshot-container {
+.screenshot_container {
   width: 100%;
   height: 100%;
   position: relative;
 }
 
-/* Image stretches to fill height; keep aspect with object-fit */
-.location-screenshot {
+/* Image stretches to fill height; keep aspect with object_fit */
+.location_screenshot {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
 }
 
-/* Back button - transparent clickable overlay on red circle area (top-left) */
-.back-btn-overlay {
+/* Back button _ transparent clickable overlay on red circle area (top_left) */
+.back_btn_overlay {
   position: absolute;
   left: 10px;
   top: 55px;
@@ -36,12 +36,12 @@
   transition: opacity 0.2s ease;
 }
 
-.back-btn-overlay:active {
+.back_btn_overlay:active {
   opacity: 0.5;
 }
 
-/* Check-in button overlay - positioned at bottom center where red arrow points */
-.checkin-button-overlay {
+/* Check_in button overlay _ positioned at bottom center where red arrow points */
+.checkin_button_overlay {
   position: absolute;
   left: 50%;
   bottom: 20px;
@@ -50,7 +50,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
+  background: linear_gradient(135deg, #0047AB 0%, #1E90FF 100%);
   color: white;
   border: none;
   border-radius: 28px;
@@ -64,15 +64,15 @@
   min-width: 160px;
 }
 
-.checkin-button-overlay:active {
+.checkin_button_overlay:active {
   transform: translateX(-50%) scale(0.95);
 }
 
-.checkin-icon {
+.checkin_icon {
   font-size: 20px;
 }
 
-.checkin-text {
+.checkin_text {
   font-size: 16px;
   font-weight: 700;
 }
@@ -89,43 +89,43 @@
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 480px) {
-  .back-btn-overlay {
+  .back_btn_overlay {
     left: 8px;
     top: 52px;
     width: 42px;
     height: 42px;
   }
 
-  .checkin-button-overlay {
+  .checkin_button_overlay {
     bottom: 15px;
     padding: 12px 36px;
     font-size: 15px;
     min-width: 150px;
   }
 
-  .checkin-icon {
+  .checkin_icon {
     font-size: 18px;
   }
 
-  .checkin-text {
+  .checkin_text {
     font-size: 15px;
   }
 }
 
 /* Adjustments for taller screens */
 @media (min-height: 800px) {
-  .checkin-button-overlay {
+  .checkin_button_overlay {
     bottom: 25px;
   }
   
-  .back-btn-overlay {
+  .back_btn_overlay {
     top: 58px;
   }
 }
 
 /* Adjustments for very tall screens */
 @media (min-height: 900px) {
-  .checkin-button-overlay {
+  .checkin_button_overlay {
     bottom: 30px;
   }
 }
