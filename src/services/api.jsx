@@ -1,20 +1,21 @@
 import axios from 'axios';
 
-
-const API_BASE_URL = 'http://localhost:5000/api';
+// ✅ FIX: Use environment variable for production, localhost for development
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const USER_ID = "1";
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE_URL + '/api', // Add /api here
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // ✅ FIX: Added for CORS
 });
 
 // Add request interceptor for logging
 api.interceptors.request.use(
   (config) => {
-    console.log(`🌐 API Request: ${config.method.toUpperCase()} ${config.url}`);
+    console.log(`🌐 API Request: ${config.method.toUpperCase()} ${config.baseURL}${config.url}`);
     return config;
   },
   (error) => {
@@ -87,8 +88,6 @@ export const resetMission = () => {
 export const getAchievements = () => {
   return api.get(`/achievements/${USER_ID}`);
 };
-
-
 
 export const getCurrentUserId = () => USER_ID;
 
