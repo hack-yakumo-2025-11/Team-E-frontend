@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import TaskCard from '../../components/TaskCard/TaskCard';
-import ProgressBar from '../../components/ProgressBar/ProgressBar';
+import TaskCard from '../../components/TaskCard';
+import ProgressBar from '../../components/ProgressBar';
 import BottomBar from '../../components/BottomBar';
-import MissionSelector from '../../components/MissionSelector/MissionSelector';
+import MissionSelector from '../../components/MissionSelector';
 import { getMissionById, swapMission } from '../../services/api';
 
 import styles from './styles.module.css';

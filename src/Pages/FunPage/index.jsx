@@ -5,7 +5,7 @@ import { Goal, Trophy } from 'lucide-react';
 
 import styles from './styles.module.css';
 import FunScreen from '../../assets/images/FunScreen.png';
-import MissionSelector from '../../components/MissionSelector/MissionSelector';
+import MissionSelector from '../../components/MissionSelector';
 
 function FunPage() {
   const navigate = useNavigate();

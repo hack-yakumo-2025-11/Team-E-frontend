@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import InitialPage from './Pages/InitialPage';
-import MissionPage from './Pages/MissionPage/MissionPage';
-import LocationDetailPage from './Pages/LocationDetailPage/LocationDetailPage';
+import MissionPage from './Pages/MissionPage';
+import LocationDetailPage from './Pages/LocationDetailPage';
 import FunPage from './Pages/FunPage';
 import AchievementsPage from './Pages/AchievementPage';
 

@@ -5,7 +5,7 @@ import OpenScan from '../../assets/images/OpenScan.png';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { resetMission } from '../../services/api';
-import MissionSelector from '../../components/MissionSelector/MissionSelector';
+import MissionSelector from '../../components/MissionSelector';
 
 function InitialPage() {
   const [backImage, setBackImage] = useState(false);

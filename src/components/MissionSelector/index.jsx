@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMissions, selectMission } from '../../services/api';
-import './MissionSelector.css';
+import styles from './styles.module.css';
 
 function MissionSelector({
   isOpen,
@@ -82,26 +82,26 @@ function MissionSelector({
 
   return (
     <div
-      className="mission-selector-overlay"
+      className={styles.mission_selector_overlay}
       onClick={onClose}
     >
       <div
-        className="mission-selector-dialog"
+        className={styles.mission_selector_dialog}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mission-selector-header">
-          <div className="mission-header-text">
+        <div className={styles.mission_selector_header}>
+          <div className={styles.mission_header_text}>
             <h2>🎯 ミッションを選択</h2>
             <p>あなたのスタイルに合ったミッションを選んでください</p>
           </div>
         </div>
 
         {loading ? (
-          <div className="mission-selector-loading">
+          <div className={styles.mission_selector_loading}>
             <p>ミッションを読み込み中...</p>
           </div>
         ) : (
-          <div className="mission-cards-container">
+          <div className={styles.mission_cards_container}>
             {missions.map((mission) => {
               const isActive =
                 activeMissionId && mission.id === activeMissionId;
@@ -111,9 +111,10 @@ function MissionSelector({
               return (
                 <div
                   key={mission.id}
-                  className={`mission-card ${
-                    isDisabled ? 'mission-card-disabled' : ''
-                  }`}
+                  className={[
+                    styles.mission_card,
+                    isDisabled ? styles.mission_card_disabled : null
+                  ]}
                   onClick={() => {
                     if (isDisabled) return;
                     handleSelectMission(mission.id);
@@ -122,35 +123,35 @@ function MissionSelector({
                     cursor: isDisabled ? 'not-allowed' : 'pointer',
                   }}
                 >
-                  <div className="mission-card-icon">{mission.icon}</div>
-                  <h3 className="mission-card-title">
+                  <div className={styles.mission_card_icon}>{mission.icon}</div>
+                  <h3 className={styles.mission_card_title}>
                     {mission.title}
                     {isActive && (
-                      <span className="mission-active-tag">（選択中）</span>
+                      <span className={styles.mission_active_tag}>（選択中）</span>
                     )}
                   </h3>
-                  <div className="mission-card-duration">
+                  <div className={styles.mission_card_duration}>
                     ⏱️ {mission.duration}
                   </div>
-                  <p className="mission-card-description">
+                  <p className={styles.mission_card_description}>
                     {mission.description}
                   </p>
-                  <div className="mission-card-stats">
-                    <div className="mission-stat">
-                      <span className="stat-icon">📍</span>
-                      <span className="stat-value">
+                  <div className={styles.mission_card_stats}>
+                    <div className={styles.mission_stat}>
+                      <span className={styles.stat_icon}>📍</span>
+                      <span className={styles.stat_value}>
                         {mission.tasks?.length ?? 0} タスク
                       </span>
                     </div>
-                    <div className="mission-stat">
-                      <span className="stat-icon">🎁</span>
-                      <span className="stat-value">
+                    <div className={styles.mission_stat}>
+                      <span className={styles.stat_icon}>🎁</span>
+                      <span className={styles.stat_value}>
                         {mission.totalReward} FUN
                       </span>
                     </div>
                   </div>
                   <button
-                    className="mission-select-button"
+                    className={styles.mission_select_button}
                     disabled={selecting || isDisabled}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -169,9 +170,9 @@ function MissionSelector({
           </div>
         )}
 
-        <div className="mission-selector-footer">
+        <div className={styles.mission_selector_footer}>
           <button
-            className="mission-cancel-button"
+            className={styles.mission_cancel_button}
             onClick={onClose}
           >
             キャンセル
