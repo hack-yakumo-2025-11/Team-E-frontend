@@ -1,4 +1,4 @@
-/* Mission Header with Reset Button */
+/* Mission Header with Swap Button */
 .mission_header {
   background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
   color: white;
@@ -12,29 +12,105 @@
   z-index: 10;
 }
 
+.mission_title_section {
+  flex: 1;
+}
+
 .mission_title {
   font-size: 24px;
   font-weight: 700;
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 0;
-  flex: 1;
+  margin: 0 0 8px 0;
 }
 
 .mission_icon {
   font-size: 28px;
 }
 
+.mission_duration_badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Swap Mission Button */
+.swap_mission_button {
+  background: white;
+  color: #0047AB;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.swap_mission_button:hover:not(.disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.swap_mission_button:active:not(.disabled) {
+  transform: translateY(0);
+}
+
+.swap_mission_button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #e0e0e0;
+  color: #999;
+}
+
+.swap_icon {
+  font-size: 18px;
+}
+
+.swap_text {
+  font-size: 15px;
+}
+
+/* Mission Locked Banner */
+.mission_locked_banner {
+  background: linear-gradient(135deg, #FFA726 0%, #FF9800 100%);
+  color: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+  animation: slideDown 0.5s ease;
+}
+
+.lock_icon {
+  font-size: 24px;
+}
+
+.lock_text {
+  font-size: 15px;
+  font-weight: 600;
+}
+
 /* Mission Complete Banner */
 .mission_complete_banner {
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 24px;
+  padding: 2rem;
   border-radius: 16px;
   text-align: center;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
   animation: slideDown 0.5s ease;
 }
 
@@ -50,14 +126,60 @@
 }
 
 .mission_complete_banner h2 {
-  font-size: 24px;
-  margin-bottom: 8px;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .mission_complete_banner p {
-  font-size: 16px;
-  margin: 0;
-  opacity: 0.9;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+/* FUN Page Button */
+.fun_page_button {
+  background: white;
+  color: #667eea;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 0.5rem;
+}
+
+.fun_page_button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.fun_page_button:active {
+  transform: translateY(0);
+}
+
+.fun_icon {
+  font-size: 1.4rem;
+  animation: bounce 1s infinite;
+}
+
+.fun_text {
+  font-size: 1rem;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .mission_content {
@@ -73,6 +195,20 @@
   box-shadow: 0 2px 8px rgba(0, 71, 171, 0.1);
   border: 1px solid #E6F2FF;
 }
+
+.mission_back_button {
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 10px;
+}
+
+.mission_back_button:hover {
+  text-decoration: underline;
+}
+
 
 .mission_description {
   font-size: 15px;
@@ -105,26 +241,6 @@
   font-size: 15px;
   font-weight: 700;
   color: #F57C00;
-}
-
-.bonus_info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px;
-  background: #FFF8E1;
-  border-radius: 8px;
-  border: 2px solid #FFB800;
-}
-
-.bonus_icon {
-  font-size: 20px;
-}
-
-.bonus_text {
-  font-size: 14px;
-  font-weight: 600;
-  color: #FF9800;
 }
 
 .tips_card {
@@ -186,82 +302,34 @@
   color: #f44336;
 }
 
-/* Mission Complete Banner with FUN Button */
-.mission_complete_banner {
-  background: linear_gradient(135deg, #667eea 0%, #764ba2 100%);
+.back_to_home_button {
+  background: linear-gradient(135deg, #0047AB 0%, #1E90FF 100%);
   color: white;
-  padding: 2rem;
-  border-radius: 16px;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
-  animation: slideIn 0.5s ease_out;
-}
-
-.mission_complete_banner h2 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.mission_complete_banner p {
-  margin: 0 0 1rem 0;
-  font-size: 1.1rem;
-  opacity: 0.95;
-}
-
-/* FUN Page Button */
-.fun_page_button {
-  background: white;
-  color: #667eea;
   border: none;
-  padding: 0.875rem 2rem;
-  border-radius: 50px;
-  font-size: 1.1rem;
-  font-weight: bold;
+  border-radius: 12px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  display: inline_flex;
-  align-items: center;
-  gap: 0.5rem;
+  margin: 20px auto;
+  display: block;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  margin-top: 0.5rem;
 }
 
-.fun_page_button:hover {
-  transform: translateY(_2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+.back-to-home-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 71, 171, 0.3);
 }
 
-.fun_page_button:active {
-  transform: translateY(0);
-}
-
-.fun_icon {
-  font-size: 1.4rem;
-  animation: bounce 1s infinite;
-}
-
-.fun_text {
-  font-size: 1rem;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(_20px);
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mission-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(_5px);
+  .swap_mission_button {
+    align-self: flex-end;
   }
 }

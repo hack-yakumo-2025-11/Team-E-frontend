@@ -1,10 +1,11 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import CountdownTimer from '../../components/countdownTimer';
 import TaskCard from '../../components/TaskCard/TaskCard';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import BottomBar from '../../components/BottomBar';
-import { getMissions } from '../../services/api';
+import MissionSelector from '../../components/MissionSelector/MissionSelector';
+import { getMissionById, swapMission } from '../../services/api';
 
 import styles from './styles.module.css';
 
@@ -14,107 +15,141 @@ function MissionPage() {
   const [mission, setMission] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showSwapDialog, setShowSwapDialog] = useState(false);
+  const [currentMissionId, setCurrentMissionId] = useState(null);
 
-  const MISSION_ID = "m1";
+  // ===============================
+  // ⬅️ BACK BUTTON HANDLER
+  // ===============================
+  const handleBack = () => {
+    
+      navigate(-1);
 
-  // ============================================
+  };
+
+  // ===============================
   // FETCH MISSION FROM BACKEND
-  // ============================================
-  const fetchMission = async () => {
+  // ===============================
+  const fetchMission = async (missionId) => {
     try {
       setLoading(true);
       setError(null);
-      
-      console.log("📡 Fetching mission from backend...");
-      const response = await getMissions();
-      
-      // Get the first mission (m1)
-      const missionData = response.data.missions.find(m => m.id === MISSION_ID);
-      
-      if (missionData) {
-        console.log("✅ Mission loaded from backend:", missionData);
-        setMission(missionData);
-      } else {
-        throw new Error("Mission not found");
-      }
-    } catch (err) {
-      console.error("❌ Error fetching mission:", err);
+
+      console.log("📡 Fetching mission:", missionId);
+      const response = await getMissionById(missionId);
+
+      console.log("✅ Mission loaded:", response.data);
+      setMission(response.data);
+      setCurrentMissionId(missionId);
+    } catch (error) {
+      console.error("❌ Error fetching mission:", error);
       setError("ミッションを読み込めませんでした");
     } finally {
       setLoading(false);
     }
   };
 
-  // ============================================
-  // INITIAL LOAD
-  // ============================================
+  // ===============================
+  // INITIAL LOAD (check selected mission)
+  // ===============================
   useEffect(() => {
-    fetchMission();
+    const selectedMissionId = locationState.state?.selectedMissionId;
+
+    if (selectedMissionId) {
+      console.log("🎯 Loading selected mission:", selectedMissionId);
+      fetchMission(selectedMissionId);
+
+      if (!locationState.state?.completedTaskId) {
+        navigate(window.location.pathname, { replace: true, state: {} });
+      }
+    } else if (currentMissionId) {
+      console.log("📍 Keeping mission:", currentMissionId);
+    } else {
+      setError("ミッションが選択されていません");
+      setLoading(false);
+    }
   }, []);
 
-  // ============================================
-  // HANDLE NEW CHECK-IN (Reset mission)
-  // ============================================
+  // ===============================
+  // SAVE ACTIVE MISSION AND LOCK STATE
+  // ===============================
   useEffect(() => {
-    if (locationState.state?.isNewCheckIn) {
-      console.log("🎯 New check-in detected - reloading mission");
-      
-      // Clear navigation state
-      navigate(window.location.pathname, { replace: true, state: {} });
-      
-      // Reload mission data from backend
-      fetchMission();
+    if (mission) {
+      localStorage.setItem("activeMissionId", mission.id);
+      localStorage.setItem("missionLocked", mission.locked ? "1" : "0");
     }
-  }, [locationState.state?.isNewCheckIn, navigate]);
+  }, [mission]);
 
-  // ============================================
-  // HANDLE TASK COMPLETION from LocationPage
-  // ============================================
+  // ===============================
+  // RELOAD MISSION AFTER TASK COMPLETION
+  // ===============================
   useEffect(() => {
-    if (locationState.state?.completedTaskId) {
-      console.log("✅ Task completion detected:", locationState.state.completedTaskId);
-      
-      // Reload mission to get updated task statuses
-      fetchMission();
-      
-      // Clear navigation state
+    if (locationState.state?.completedTaskId && currentMissionId) {
+      fetchMission(currentMissionId);
+
       navigate(window.location.pathname, { replace: true, state: {} });
     }
-  }, [locationState.state?.completedTaskId, navigate]);
+  }, [locationState.state?.completedTaskId]);
 
-  // ============================================
-  // HANDLE TASK CLICK
-  // ============================================
+  // ===============================
+  // TASK CLICK
+  // ===============================
   const handleTaskClick = (task) => {
-    if (task.completed) {
-      console.log("⚠️ Task already completed");
-      return;
-    }
+    if (task.completed) return;
 
-    console.log("🎯 Navigating to task location:", task.id);
     navigate(`/location/${task.locationId}`, {
       state: { task, missionId: mission.id },
     });
   };
 
-  // ============================================
-  // HANDLE FUN PAGE REDIRECT
-  // ============================================
+  // ===============================
+  // SWAP MISSION
+  // ===============================
+  const handleSwapClick = () => {
+    if (mission.locked) {
+      alert("ミッションがロックされています。変更できません。");
+      return;
+    }
+    setShowSwapDialog(true);
+  };
+
+  const handleSwapConfirm = async (newMissionId) => {
+    try {
+      console.log("🔄 Swapping:", currentMissionId, "→", newMissionId);
+
+      const response = await swapMission(currentMissionId, newMissionId);
+
+      if (response.data.success) {
+        fetchMission(newMissionId);
+        setShowSwapDialog(false);
+      }
+    } catch (error) {
+      console.error("❌ Error swapping:", error);
+
+      if (error.response?.data?.locked) {
+        alert("このミッションはロックされているため、変更できません");
+      } else {
+        alert("ミッション変更中にエラーが発生しました");
+      }
+    }
+  };
+
+  // ===============================
+  // FUN PAGE NAVIGATION
+  // ===============================
   const handleGoToFunPage = () => {
-    console.log("🎉 Navigating to FUN page");
     navigate('/fun');
   };
 
-  // ============================================
-  // CALCULATE PROGRESS
-  // ============================================
-  const getCompletedCount = () => {
-    return mission?.tasks.filter((t) => t.completed).length || 0;
-  };
+  // ===============================
+  // PROGRESS CALCULATION
+  // ===============================
+  const getCompletedCount = () =>
+    mission?.tasks.filter((t) => t.completed).length || 0;
 
-  // ============================================
-  // RENDER
-  // ============================================
+  // ===============================
+  // RENDER — LOADING / ERROR
+  // ===============================
   if (loading) {
     return (
       <div className={styles.mission_page}>
@@ -127,6 +162,9 @@ function MissionPage() {
     return (
       <div className={styles.mission_page}>
         <div className={styles.error}>{error || "ミッションが見つかりません"}</div>
+        <button className={styles.back_to_home_button} onClick={() => navigate('/')}>
+          ホームに戻る
+        </button>
       </div>
     );
   }
@@ -134,17 +172,56 @@ function MissionPage() {
   const completedCount = getCompletedCount();
   const allTasksComplete = completedCount === mission.tasks.length;
 
+  // ===============================
+  // FULL PAGE RENDER
+  // ===============================
   return (
     <div className={styles.mission_page}>
+      {/* ============================ */}
+      {/* HEADER with BACK & TITLE     */}
+      {/* ============================ */}
       <div className={styles.mission_header}>
-        <h1 className={styles.mission_title}>
-          <span className={styles.mission_icon}>🎯</span>
-          {mission.title}
-        </h1>
+        {/* BACK BUTTON */}
+        <button
+          className={styles.mission_back_button}
+          onClick={handleBack}
+          aria-label="戻る"
+        >
+          ← 戻る
+        </button>
+        <div className={styles.mission_title_section}>
+          <h1 className={styles.mission_title}>
+            <span className={styles.mission_icon}>{mission.icon}</span>
+            {mission.title}
+          </h1>
+          <div className={styles.mission_duration_badge}>{mission.duration}</div>
+        </div>
+
+        {/* SWAP BUTTON */}
+        {!allTasksComplete && (
+          <button
+            className={`swap-mission-button ${mission.locked ? 'disabled' : ''}`}
+            onClick={handleSwapClick}
+            disabled={mission.locked}
+          >
+            <span className="swap-icon">🔄</span>
+            <span className="swap-text">変更</span>
+          </button>
+        )}
       </div>
 
-      <div className={styles.mission_content}>
-        <CountdownTimer expiryTime={mission.expiryTime} />
+        {/* ============================ */}
+        {/* CONTENT SECTION               */}
+        {/* ============================ */}
+        <div className={styles.mission_content}>
+          {mission.locked && !allTasksComplete && (
+            <div className={styles.mission_locked_banner}>
+              <span className={styles.lock_icon}>🔒</span>
+              <span className={styles.lock_text}>
+                ミッションがロックされました！タスクを完了してください
+              </span>
+            </div>
+          )}
 
         {allTasksComplete && (
           <div className={styles.mission_complete_banner}>
@@ -155,7 +232,6 @@ function MissionPage() {
             <button 
               className={styles.fun_page_button} 
               onClick={handleGoToFunPage}
-              aria-label="Go to FUN page"
             >
               <span className={styles.fun_icon}>🎮</span>
               <span className={styles.fun_text}>FUNを見る</span>
@@ -179,8 +255,8 @@ function MissionPage() {
           <h3 className={styles.tips_title}>💡 ヒント</h3>
           <ul className={styles.tips_list}>
             <li>✅ タスクは順不同で完了できます</li>
-            <li>📍 すべての場所は徒歩10分圏内です</li>
-            <li>🏆 アチーブメントバッジを集めよう！</li>
+            <li>📍 すべての場所は徒歩圏内です</li>
+            <li>🔒 最初のタスク完了後はミッション変更不可</li>
           </ul>
         </div>
 
@@ -201,7 +277,20 @@ function MissionPage() {
 
         <ProgressBar current={completedCount} total={mission.tasks.length} />
       </div>
-      <BottomBar/>
+
+      {/* ============================ */}
+      {/* SWAP MISSION SELECTOR        */}
+      {/* ============================ */}
+      {showSwapDialog && (
+        <MissionSelector
+          isOpen={showSwapDialog}
+          onClose={() => setShowSwapDialog(false)}
+          onSelectMission={handleSwapConfirm}
+          isSwapMode={true}
+        />
+      )}
+
+      <BottomBar />
     </div>
   );
 }
