@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import CountdownTimer from '../../components/countdownTimer/countdownTimer';
+import CountdownTimer from '../../components/countdownTimer';
 import TaskCard from '../../components/TaskCard/TaskCard';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import BottomBar from '../../components/BottomBar';
