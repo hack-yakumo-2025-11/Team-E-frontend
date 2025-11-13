@@ -1,4 +1,3 @@
-// FULL MissionPage.jsx with Back Button — COPY THIS WHOLE FILE
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';

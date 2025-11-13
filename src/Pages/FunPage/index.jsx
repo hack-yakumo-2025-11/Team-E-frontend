@@ -15,6 +15,21 @@ function FunPage() {
   const activeMissionId = localStorage.getItem('activeMissionId');
   const isMissionLocked = localStorage.getItem('missionLocked') === '1';
 
+  const handleMissionsClick = () => {
+    // If mission is locked and already selected, navigate directly to mission page
+    if (isMissionLocked && activeMissionId) {
+      console.log('🔒 Mission locked, navigating to active mission:', activeMissionId);
+      navigate('/mission-page', {
+        state: {
+          selectedMissionId: activeMissionId
+        }
+      });
+    } else {
+      // Otherwise, show mission selector
+      setIsMissionSelectorOpen(true);
+    }
+  };
+
   return (
     <div className={styles.fun_page}>
       <img
@@ -29,10 +44,10 @@ function FunPage() {
         onClick={() => navigate('/')}
       />
 
-      {/* Missions button → open MissionSelector modal */}
+      {/* Missions button → navigate directly to active mission or open selector */}
       <button
         className={styles.fun_page_missions_button}
-        onClick={() => setIsMissionSelectorOpen(true)}
+        onClick={handleMissionsClick}
       >
         <Goal color="red" />
       </button>
@@ -45,7 +60,7 @@ function FunPage() {
         <Trophy color="gold" />
       </button>
 
-      {/* Mission selector modal */}
+      {/* Mission selector modal - only shows when mission is NOT locked */}
       <MissionSelector
         isOpen={isMissionSelectorOpen}
         onClose={() => setIsMissionSelectorOpen(false)}
