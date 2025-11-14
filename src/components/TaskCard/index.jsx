@@ -23,12 +23,11 @@ function TaskCard({ task, taskNumber, isCompleted, isRecommended, onClick }) {
 
   return (
     <div 
-      className={
-        [
-          styles.task_card, 
-          isCompleted ? styles.completed : null, 
-          isRecommended ? styles.recommended : null
-        ]}
+      className={[
+        styles.task_card, 
+        isCompleted ? styles.completed : null, 
+        isRecommended ? styles.recommended : null
+      ].join(' ')}
       onClick={onClick}
       style={{ cursor: isCompleted ? 'default' : 'pointer' }}
     >
