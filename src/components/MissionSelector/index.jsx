@@ -114,7 +114,7 @@ function MissionSelector({
                   className={[
                     styles.mission_card,
                     isDisabled ? styles.mission_card_disabled : null
-                  ]}
+                  ].join(' ')}
                   onClick={() => {
                     if (isDisabled) return;
                     handleSelectMission(mission.id);

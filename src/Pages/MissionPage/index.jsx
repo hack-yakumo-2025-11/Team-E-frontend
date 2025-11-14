@@ -200,12 +200,15 @@ function MissionPage() {
         {/* SWAP BUTTON */}
         {!allTasksComplete && (
           <button
-            className={`swap-mission-button ${mission.locked ? 'disabled' : ''}`}
+            className={[
+              styles.swap_mission_button,
+              mission.locked ? styles.disabled : null
+            ].join(' ')}
             onClick={handleSwapClick}
             disabled={mission.locked}
           >
-            <span className="swap-icon">🔄</span>
-            <span className="swap-text">変更</span>
+            <span className={styles.swap_icon}>🔄</span>
+            <span className={styles.swap_text}>変更</span>
           </button>
         )}
       </div>

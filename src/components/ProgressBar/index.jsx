@@ -24,7 +24,10 @@ function ProgressBar({ current, total }) {
         {steps.map((step) => (
           <div key={step} className={styles.progress_step_wrapper}>
             <div 
-              className={[styles.progress_step, step <= current ? styles.completed : null]}
+              className={[
+                styles.progress_step, 
+                step <= current ? styles.completed : null
+              ].join(' ')}
             >
               {step}
             </div>

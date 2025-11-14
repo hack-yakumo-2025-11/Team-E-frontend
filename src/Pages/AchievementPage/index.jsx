@@ -97,7 +97,7 @@ function AchievementsPage() {
                                         shownList === index ?
                                             ach.fullList.map((place) => {
                                                 return (
-                                                    <span>
+                                                    <span key={place.name}>
                                                         {
                                                             list.includes(place.name) ?
                                                                 <CircleCheckBig color='green'/> :

@@ -151,7 +151,7 @@ function LocationDetailPage() {
     <div className={styles.location_page_screenshot}>
       {/* Back button overlay - transparent clickable area on grey back arrow */}
       <button 
-        className={styles.back_button_overlay} 
+        className={styles.back_btn_overlay} 
         onClick={() => {
           console.log("⬅️ Back button clicked, navigating to mission page");
           navigate("/mission-page", {
